@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "NODE_ENV=test nodemon bin/http",
+    "start": "node bin/http"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fourcast-Final-Project/server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fourcast-Final-Project/server/issues"
+  },
+  "homepage": "https://github.com/Fourcast-Final-Project/server#readme",
+  "devDependencies": {
+    "jest": "^26.5.3",
+    "supertest": "^5.0.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
