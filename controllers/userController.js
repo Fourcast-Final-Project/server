@@ -25,7 +25,7 @@ class UserController {
             where: { email: req.body.email }
         })
         .then(data => {
-            console.log(data, '<<<<<<<<<<<< data dari login')
+            // console.log(data, '<<<<<<<<<<<< data dari login')
             if(!data) throw { name: 'INVALID_EMAIL_OR_PASS' }
             let compare = comparePass(req.body.password, data.password)
             if(!compare) throw { name: 'INVALID_EMAIL_OR_PASS' }

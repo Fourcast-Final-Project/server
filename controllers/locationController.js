@@ -3,12 +3,12 @@ const { Location } = require('../models')
 
 class LocationController {
     static createLocation(req, res, next){
-        let { name, waterlevel, latitude, longtitude  } = req.body
+        let { name, waterLevel, latitude, longitude  } = req.body
         Location.create({
             name,
-            waterlevel,
+            waterLevel,
             latitude,
-            longtitude
+            longitude
         })
         .then(data => {
             res.status(201).json({ msg: 'Success Create Location' })
@@ -21,7 +21,7 @@ class LocationController {
     static getAllLocation(req, res, next){
         Location.findAll()
         .then(data => {
-            res.status(200).json({ result: data })
+            res.status(200).json({ results: data })
         })
         .catch(err => {
             next(err)
@@ -32,6 +32,7 @@ class LocationController {
         let { id } = req.params
         Location.findByPk(id)
         .then(data => {
+            if (!data) throw { name: 'NOT_FOUND' }
             res.status(200).json({ result: data })
         })
         .catch(err => {

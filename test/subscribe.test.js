@@ -1,5 +1,6 @@
 const request = require('supertest')
 const app = require('../app')
+const { User, Subscribe } = require('../models')
 
 const subscribe_data = {
     userId: 1,
@@ -13,13 +14,6 @@ beforeAll(function(done) {
         email: 'fourcast@mail.com',
         password: '123456'
     })
-    .then(result => {
-        return User.findOne({
-            where: {
-                id: result.data.id
-            }
-        })
-    })
     .then(user => {
         userId = user.id
         done()
@@ -27,16 +21,6 @@ beforeAll(function(done) {
     .catch(err => {
         done(err)
     })
-})
-
-afterAll(function(done) {
-    if (process.env.NODE_ENV == 'test') {
-        Subscribe.destroy({truncate: true})
-        .then(() => {
-            done()
-        })
-        .catch(err => done(err))
-    }
 })
 
 describe('create subscribe/success case', () => {

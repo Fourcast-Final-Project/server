@@ -1,37 +1,54 @@
 const request = require('supertest')
 const app = require('../app')
-const { Location } = require('../models')
+const { History } = require('../models')
 
-const location_data = {
-    name: 'depok',
-    waterLevel: 3.3,
-    latitude: -6.385589,
-    longitude: 106.830711
+const history_data = {
+    location: 'depok',
+    time: '11 Januari 2020',
+    waterLevel: 7.5,
+    userId: null
 }
 
-describe('create location/success case', () => {
-    test ('success adding city to database', (done) => {
+let user_id = null
+
+beforeAll(function(done) {
+    User.create({
+        email: 'fourcast@mail.com',
+        password: '123456'
+    })
+    .then(user => {
+        history_data.userId = user.id
+        user_id = user.id
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+})
+
+describe('create history/success case', () => {
+    test ('success adding history to database', (done) => {
         request (app)
-            .post('/locations')
-            .send(location_data)
+            .post('/histories')
+            .send(history_data)
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(201)
-               expect(res.body).toHaveProperty('msg', "Success Create Location")
+               expect(res.body).toHaveProperty('msg', "Success Create History")
                done()
             })
     })
 })
 
-describe('create location/error case', () => {
-    test ('invalid name', (done) => {
+describe('create history/error case', () => {
+    test ('invalid location', (done) => {
         request (app)
-            .post('/locations')
+            .post('/histories')
             .send({
-                name: '',
-                waterLevel: 3.3,
-                latitude: -6.385589,
-                longitude: 106.830711
+                location: '',
+                time: '11 Januari 2020',
+                waterLevel: 7.5,
+                userId: null
             })
             .end( function(err, res) {
                 const errors = ["must enter location's name"]
@@ -43,36 +60,36 @@ describe('create location/error case', () => {
             })
     })
 
-    test ('invalid latitude', (done) => {
+    test ('invalid time', (done) => {
         request (app)
-            .post('/locations')
+            .post('/histories')
             .send({
-                name: 'depok',
-                waterLevel: 33,
-                latitude: -93,
-                longitude: 106.830711
+                location: 'depok',
+                time: '',
+                waterLevel: 7.5,
+                userId: user_id
             })
             .end( function(err, res) {
-                const errors = ['latitude range must be between -90 up to +90 degrees']
-               if (err) throw err
-               expect(res.status).toBe(400)
-               expect(res.body).toHaveProperty('errors', expect.any(Array))
-               expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-               done()
+                const errors = ["invalid history's time"]
+                if (err) throw err
+                expect(res.status).toBe(400)
+                expect(res.body).toHaveProperty('errors', expect.any(Array))
+                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+                done()
             })
     })
 
-    test ('invalid longitude', (done) => {
+    test ('invalid user id', (done) => {
         request (app)
-            .post('/locations')
+            .post('/histories')
             .send({
-                name: 'depok',
-                waterLevel: 33,
-                latitude: -6.385589,
-                longitude: 186.830711
+                location: 'depok',
+                time: '11 Januari 2020',
+                waterLevel: 7.5,
+                userId: null
             })
             .end( function(err, res) {
-                const errors = ['longitude range must be between -180 up to +180 degrees']
+                const errors = ['histories must have userId']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -82,11 +99,13 @@ describe('create location/error case', () => {
     })
 })
 
-describe('read all locations/success case', () => {
-    test ('success read all locations data', (done) => {
+describe('read all histories/success case', () => {
+    test ('success read all histories data', (done) => {
         request (app)
-            .get(`/locations/`)
-            .send()
+            .get(`/histories/`)
+            .send({
+                userId: user_id
+            })
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -96,17 +115,17 @@ describe('read all locations/success case', () => {
     })
 })
 
-let locationId = null
+let historyId = null
 
 beforeAll(function(done) {
-    Location.create({
-        name: 'depok',
-        waterLevel: 3.3,
-        latitude: -6.385589,
-        longitude: 106.830711
+    History.create({
+        location: 'depok',
+        time: '11 Januari 2020',
+        waterLevel: 7.5,
+        userId: user_id
     })
-    .then(location => {
-        locationId = location.id
+    .then(history => {
+        historyId = history.id
         done()
     })
     .catch(err => {
@@ -114,10 +133,10 @@ beforeAll(function(done) {
     })
 })
 
-describe('read one location/success case', () => {
+describe('read one history/success case', () => {
     test ('success read one location data', (done) => {
         request (app)
-            .get(`/locations/${locationId}`)
+            .get(`/histories/${historyId}`)
             .send()
             .end( function(err, res) {
                if (err) throw err
@@ -128,10 +147,10 @@ describe('read one location/success case', () => {
     })
 })
 
-describe('read one location/error case', () => {
-    test ('invalid location id', (done) => {
+describe('read one history/error case', () => {
+    test ('invalid history id', (done) => {
         request (app)
-            .get(`/locations/${locationId + 10}`)
+            .get(`/histories/${historyId + 10}`)
             .end( function(err, res) {
                 const errors = ['The data you looking for is not found!!']
                 if (err) throw err
@@ -143,24 +162,24 @@ describe('read one location/error case', () => {
     })
 })
 
-describe('delete location/success case', () => {
-    test ('success removing city from location list', (done) => {
+describe('delete history/success case', () => {
+    test ('success removing history from histories list', (done) => {
         request (app)
-            .delete(`/locations/${locationId}`)
+            .delete(`/histories/${historyId}`)
             .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('msg', 'Success Delete Location')
+               expect(res.body).toHaveProperty('msg', 'Success Delete History')
                done()
             })
     })
 })
 
-describe('delete location/error case', () => {
-    test ('invalid location id', (done) => {
+describe('delete history/error case', () => {
+    test ('invalid history id', (done) => {
         request (app)
-            .delete(`/locations/${locationId + 10}`)
+            .delete(`/histories/${historyId + 10}`)
             .send()
             .end( function(err, res) {
                 const errors = ['The data you looking for is not found!!']
