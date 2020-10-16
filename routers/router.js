@@ -3,13 +3,13 @@ const UserController = require('../controllers/userController.js')
 const LocationController = require('../controllers/locationController')
 // User
 router.post('/register', UserController.register)
-router.post('/users/login', UserController.login)
+router.post('/login', UserController.login)
 
 // Location
-router.post('/location', LocationController.createLocation)
-router.get('/location', LocationController.getAllLocation)
-router.get('/location/:id', LocationController.getByIdLocation)
-router.put('/location/:id', LocationController.editLocation)
-router.delete('/location/:id', LocationController.destroyLocation)
+router.post('/locations', LocationController.createLocation)
+router.get('/locations', LocationController.getAllLocation)
+router.get('/locations/:id', LocationController.getByIdLocation)
+router.put('/locations/:id', LocationController.editLocation)
+router.delete('/locations/:id', LocationController.destroyLocation)
 
 module.exports = router

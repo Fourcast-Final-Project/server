@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../app')
 
 const user_data = {
-    email: 'fourcastmail.com',
+    email: 'fourcast@mail.com',
     password: '123456'
 }
 
@@ -13,10 +13,8 @@ describe('register/success case', () => {
             .send(user_data)
             .end( function(err, res) {
                if (err) throw err
-               expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('id', expect.any(Number))
-               expect(res.body).toHaveProperty('email', user_data.email)
-               expect(res.body).not.toHaveProperty('password')
+               expect(res.status).toBe(201)
+               expect(res.body).toHaveProperty('msg', 'Success Create User')
                done()
             })
     })
@@ -31,7 +29,7 @@ describe('register/error case', () => {
                 password: ''
             })
             .end(function(err, res) {
-                const errors = [ 'user must enter a password']
+                const errors = [ 'password character must be more than 5 and less than 15']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -48,7 +46,7 @@ describe('register/error case', () => {
                 password: '123456'
             })
             .end( function(err, res) {
-                const errors = [ 'user must enter his/her email']
+                const errors = [ 'Invalid Email Address']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -66,7 +64,6 @@ describe('login/success case', () => {
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('id', expect.any(Number))
                expect(res.body).toHaveProperty('email', user_data.email)
                done()
             })
@@ -82,7 +79,7 @@ describe('login/error case', () => {
                 password: '123'
             })
             .end( function(err, res) {
-                const errors = [ 'invalid email or password']
+                const errors = [ 'Your email or password is wrong!!']
                 if (err) throw err
                 expect(res.status).toBe(400)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -99,7 +96,7 @@ describe('login/error case', () => {
                 password: '123456'
             })
             .end( function(err, res) {
-                const errors = [ 'invalid email or password']
+                const errors = [ 'Your email or password is wrong!!']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -116,7 +113,7 @@ describe('login/error case', () => {
                 password: '123456'
             })
             .end( function(err, res) {
-                const errors = [ 'email and password are required']
+                const errors = [ 'Your email or password is wrong!!']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -133,7 +130,7 @@ describe('login/error case', () => {
                 password: ''
             })
             .end( function(err, res) {
-                const errors = [ 'email and password are required']
+                const errors = [ 'Your email or password is wrong!!']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))

@@ -11,13 +11,13 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      waterlevel: {
+      waterLevel: {
         type: Sequelize.DOUBLE
       },
       latitude: {
         type: Sequelize.DOUBLE
       },
-      longtitude: {
+      longitude: {
         type: Sequelize.DOUBLE
       },
       createdAt: {

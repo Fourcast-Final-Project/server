@@ -1,5 +1,6 @@
 const request = require('supertest')
 const app = require('../app')
+const { Location } = require('../models')
 
 const location_data = {
     name: 'depok',
@@ -16,10 +17,7 @@ describe('create location/success case', () => {
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(201)
-               expect(res.body).toHaveProperty('id', expect.any(Number))
-               expect(res.body).toHaveProperty('name', location_data.name)
-               expect(res.body).toHaveProperty('latitude', location_data.latitude)
-               expect(res.body).toHaveProperty('longitude', location_data.longitude)
+               expect(res.body).toHaveProperty('msg', "Success Create Location")
                done()
             })
     })
@@ -42,25 +40,6 @@ describe('create location/error case', () => {
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
                 expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                 done()
-            })
-    })
-
-    test ('invalid water level', (done) => {
-        request (app)
-            .post('/locations')
-            .send({
-                name: 'depok',
-                waterLevel: -1,
-                latitude: -6.385589,
-                longitude: 106.830711
-            })
-            .end( function(err, res) {
-                const errors = ['water level must be equal or more than 0']
-               if (err) throw err
-               expect(res.status).toBe(400)
-               expect(res.body).toHaveProperty('errors', expect.any(Array))
-               expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-               done()
             })
     })
 
@@ -111,7 +90,7 @@ describe('read all locations/success case', () => {
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('locations', expect.any(Array))
+               expect(res.body).toHaveProperty('results', expect.any(Array))
                done()
             })
     })
@@ -143,11 +122,7 @@ describe('read one location/success case', () => {
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('id', expect.any(Number))
-               expect(res.body).toHaveProperty('name', location_data.name)
-               expect(res.body).toHaveProperty('waterLevel', location_data.waterLevel)
-               expect(res.body).toHaveProperty('latitude', location_data.latitude)
-               expect(res.body).toHaveProperty('longitude', location_data.longitude)
+               expect(res.body).toHaveProperty('result', expect.any(Object))
                done()
             })
     })
@@ -156,11 +131,11 @@ describe('read one location/success case', () => {
 describe('read one location/error case', () => {
     test ('invalid location id', (done) => {
         request (app)
-            .get(`/locations/${locationId + 1}`)
+            .get(`/locations/${locationId + 10}`)
             .end( function(err, res) {
-                const errors = ['invalid location id']
+                const errors = ['The data you looking for is not found!!']
                 if (err) throw err
-                expect(res.status).toBe(400)
+                expect(res.status).toBe(404)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
                 expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                 done()
@@ -176,7 +151,7 @@ describe('delete location/success case', () => {
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('message', 'success removing city from your locations list')
+               expect(res.body).toHaveProperty('msg', 'Success Delete Location')
                done()
             })
     })
@@ -185,12 +160,12 @@ describe('delete location/success case', () => {
 describe('delete location/error case', () => {
     test ('invalid location id', (done) => {
         request (app)
-            .delete(`/locations/${locationId + 1}`)
+            .delete(`/locations/${locationId + 10}`)
             .send()
             .end( function(err, res) {
-                const errors = ['invalid location id']
+                const errors = ['The data you looking for is not found!!']
                 if (err) throw err
-                expect(res.status).toBe(400)
+                expect(res.status).toBe(404)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
                 expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                 done()
