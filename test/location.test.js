@@ -117,47 +117,46 @@ describe('read all locations/success case', () => {
     })
 })
 
+let locationId = null
+
+beforeAll(function(done) {
+    Location.create({
+        name: 'depok',
+        waterLevel: 3.3,
+        latitude: -6.385589,
+        longitude: 106.830711
+    })
+    .then(location => {
+        locationId = location.id
+        done()
+    })
+    .catch(err => {
+        done(err)
+    })
+})
+
 describe('read one location/success case', () => {
     test ('success read one location data', (done) => {
         request (app)
-            .get(`/subscribes/${locationId}`)
-            .send({
-                userId: user_id
-            })
+            .get(`/locations/${locationId}`)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
                expect(res.body).toHaveProperty('id', expect.any(Number))
-               expect(res.body).toHaveProperty('userId', userId)
-               expect(res.body).toHaveProperty('locationId', locationId)
+               expect(res.body).toHaveProperty('name', location_data.name)
+               expect(res.body).toHaveProperty('waterLevel', location_data.waterLevel)
+               expect(res.body).toHaveProperty('latitude', location_data.latitude)
+               expect(res.body).toHaveProperty('longitude', location_data.longitude)
                done()
             })
     })
 })
 
-describe('read one subscribe/error case', () => {
-    test ('didnt have userId', (done) => {
+describe('read one location/error case', () => {
+    test ('invalid location id', (done) => {
         request (app)
-            .get(`/subscribes/${locationId}`)
-            .send({
-                userId: null
-            })
-            .end( function(err, res) {
-                const errors = ['invalid user id']
-                if (err) throw err
-                expect(res.status).toBe(400)
-                expect(res.body).toHaveProperty('errors', expect.any(Array))
-                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-                done()
-            })
-    })
-
-    test ('didnt have locationId', (done) => {
-        request (app)
-            .get(`/subscribes/${locationId + 1}`)
-            .send({
-                userId: user_id
-            })
+            .get(`/locations/${locationId + 1}`)
             .end( function(err, res) {
                 const errors = ['invalid location id']
                 if (err) throw err
@@ -169,52 +168,32 @@ describe('read one subscribe/error case', () => {
     })
 })
 
-describe('delete subscribe/success case', () => {
-    test ('success removing city from subscribed list', (done) => {
+describe('delete location/success case', () => {
+    test ('success removing city from location list', (done) => {
         request (app)
-            .delete(`/subscribes/${locationId}`)
-            .send({
-                userId: user_id
-            })
+            .delete(`/locations/${locationId}`)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('message', 'success removing city from your subscribed list')
+               expect(res.body).toHaveProperty('message', 'success removing city from your locations list')
                done()
             })
     })
 })
 
-describe('subscribe/error case', () => {
-    test ('invalid user id', (done) => {
-        request (app)
-            .delete(`/subscribe/${locationId}`)
-            .send({
-                userId: null
-            })
-            .end( function(err, res) {
-                const errors = ['invalid userId']
-               if (err) throw err
-               expect(res.status).toBe(400)
-               expect(res.body).toHaveProperty('errors', expect.any(Array))
-               expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-               done()
-            })
-    })
-
+describe('delete location/error case', () => {
     test ('invalid location id', (done) => {
         request (app)
-            .delete(`/subscribe/${locationId + 1}`)
-            .send({
-                userId: user_id
-            })
+            .delete(`/locations/${locationId + 1}`)
+            .send()
             .end( function(err, res) {
-                const errors = ['invalid locationId']
-               if (err) throw err
-               expect(res.status).toBe(400)
-               expect(res.body).toHaveProperty('errors', expect.any(Array))
-               expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-               done()
+                const errors = ['invalid location id']
+                if (err) throw err
+                expect(res.status).toBe(400)
+                expect(res.body).toHaveProperty('errors', expect.any(Array))
+                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+                done()
             })
     })
 })
