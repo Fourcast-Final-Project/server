@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "dev": "NODE_ENV=test nodemon bin/http",
+    "start": "node bin/http"
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,8 @@
     "sequelize": "^6.3.5"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.2.0"
+    "jest": "^26.5.3",
+    "sequelize-cli": "^6.2.0",
+    "supertest": "^5.0.0"
   }
 }
