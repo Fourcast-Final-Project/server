@@ -31,7 +31,7 @@ beforeAll(function(done) {
 
 afterAll(function(done) {
     if (process.env.NODE_ENV == 'test') {
-        Product.destroy({truncate: true})
+        Subscribe.destroy({truncate: true})
         .then(() => {
             done()
         })
@@ -95,12 +95,8 @@ let locationId = null
 let user_id = null
 
 beforeAll(function(done) {
-    Product.create({
-        name: 'Music Alley Classical',
-        image_url: 'https://images-na.ssl-images-amazon.com/images/I/81tQhEEtiEL.jpg',
-        price: 5000,
-        stock: 31,
-        userId
+    Subscribe.create({
+       userId: 1
     })
     .then(data => {
         locationId = data.id
@@ -212,7 +208,7 @@ describe('delete subscribe/success case', () => {
     })
 })
 
-describe('subscribe/error case', () => {
+describe('delete subscribe/error case', () => {
     test ('invalid user id', (done) => {
         request (app)
             .delete(`/subscribe/${locationId}`)
