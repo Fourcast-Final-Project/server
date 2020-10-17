@@ -1,4 +1,3 @@
-<br><br>
 **Fourcast-Server API**
 ----
 
