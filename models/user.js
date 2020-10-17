@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Subscribe)
+      User.hasMany(models.History)
     }
   };
   User.init({
