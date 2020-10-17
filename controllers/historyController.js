@@ -2,7 +2,8 @@ const { History } = require('../models')
 
 class HistoryController {
     static create(req, res, next) {
-        const { location, time, waterLevel, UserId } = req.body
+        const { location, time, waterLevel } = req.body
+        const UserId = req.loggedInUser.id
         History.create({
             location, time, waterLevel, UserId
         })
@@ -15,7 +16,7 @@ class HistoryController {
     }
 
     static readAll(req, res, next) {
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         History.findAll({
             where: {
                 UserId
@@ -32,7 +33,7 @@ class HistoryController {
 
     static readOne(req, res, next) {
         const { id } = req.params
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         History.findOne({
             where: {
                 id, UserId
@@ -50,7 +51,7 @@ class HistoryController {
 
     static deleteOne(req, res, next) {
         const { id } = req.params
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         History.findOne({
             where: {
                 id, UserId
@@ -70,7 +71,7 @@ class HistoryController {
     }
 
     static deleteAll(req, res, next) {
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         History.destroy({
             where: {
                 UserId

@@ -27,7 +27,11 @@ function errorHandler(err, req, res, next){
     } else if(err.name === 'INVALID_DATA') {
         errors.push('your input data is invalid')
         statusCode = 400
+    } else if (err.name === 'JsonWebTokenError') { 
+        errors.push('user must have access token')
+        statusCode = 400
     } else {
+        // console.log(err, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,,,,,')
         errors.push(err.msg || 'Internal Server Error')
         statusCode = 500
     }
