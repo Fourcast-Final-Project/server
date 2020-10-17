@@ -3,6 +3,7 @@
 const { User } = require('../models')
 const { comparePass } = require('../helpers/bcrypt')
 
+
 class UserController {
     static register(req, res, next){
         let { email, password } = req.body
