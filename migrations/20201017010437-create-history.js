@@ -8,11 +8,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      location: {
-        type: Sequelize.STRING
-      },
-      time: {
-        type: Sequelize.STRING
+      LocationId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Locations",
+          key: "id"
+        }
       },
       waterLevel: {
         type: Sequelize.DOUBLE

@@ -1,21 +1,48 @@
 'use strict'
-const { Location } = require('../models')
+const { Location, History } = require('../models')
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const db = require('../configFirebase/firebaseDB')
-const LocationRef = db.ref('location') 
+const LocationRef = db.ref('Location') 
 
 
 class LocationController {
     static createLocation(req, res, next){
-        let { name, waterLevel, latitude, longitude  } = req.body
+        // 01. create di postgres Location
+        // 02. create di postgres History
+        // 03. create di firebase DB
 
-        console.log(name, waterLevel, latitude, longitude)
-        
+        let { name, waterLevel, latitude, longitude  } = req.body
+        let id
+
+        // 01. create di postgres Location
         Location.create({
             name,
             waterLevel,
             latitude,
             longitude
+        })
+        .then(data => {
+            id = data.id
+            let payload = {
+                LocationId : data.id,
+                waterLevel : data.waterLevel,
+                UserId : 1// default dulu sementara
+            }
+            // 02. create di postgres History
+            return History.create(payload)
+        })
+        .then(data => {
+            // 03. create di firebase DB
+            return LocationRef.child(id).set({
+                id: id,
+                name: name,
+                waterLevel: waterLevel,
+                latitude: latitude,
+                longitude: longitude,
+                lastUpdate: `"${data.updatedAt}"`
+            })
         })
         .then(data => {
             res.status(201).json({ msg: 'Success Create Location' })
@@ -25,24 +52,48 @@ class LocationController {
         })
     }
 
-    static getAllLocation(req, res, next){
-        
+    static getAllLocation(req, res, next){       
 
-        // let query = 'Palembang' // set default
+        
         // firebase.database().ref('location').orderByChild("name").equalTo(query).once("value", function(dataSnapshot){
         //     // console.log(snapshoot.val())
         //     setData(dataSnapshot.val())
         //     })
-
         // LocationRef.orderByChild('yourKey').startAt("Pa").endAt("\uf8ff").once("value", function(dataSnapshot){
-        //  LocationRef.orderByChild("name").equalTo(query).once("value", function(dataSnapshot){
+        
+        // select from Location where name = 'Bandung'
+        // let query = 'Bandung' // set default
+        // LocationRef.orderByChild("name").equalTo(query).once("value", function(dataSnapshot){
         //     console.log(dataSnapshot.val())
         // });
 
 
+        LocationRef.orderByChild("name").once("value", function(dataSnapshot){
+            console.log(dataSnapshot.val())
+        });
+
         Location.findAll()
         .then(data => {
             res.status(200).json({ results: data })
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
+    static search(req, res, next){
+        let { query } = req.params
+        console.log(query, 'dari serach')
+
+        Location.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${query}%`
+                  }
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data })
         })
         .catch(err => {
             next(err)
@@ -62,7 +113,15 @@ class LocationController {
     }
 
     static editLocation(req, res, next){
+        // 01. udpate di postgres Location
+        // 02. create di postgres History
+        // 03. update di firebase DB
+
         let { id } = req.params
+
+        let result
+
+         // 01. udpate di postgres Location
         Location.findByPk(id)
         .then(data => {
             if(!data) throw { name: 'NOT_FOUND' }
@@ -74,22 +133,50 @@ class LocationController {
             }
         })
         .then(data => {
-            res.status(200).json({ data })
+            result = data
+            let payload = {
+                LocationId : data.id,
+                waterLevel : data.waterLevel,
+                UserId : 1// default dulu sementara
+            }
+            // 02. create di postgres History
+            return History.create(payload)
+        })
+        .then(data => {
+            // 03. update di firebase DB
+            return LocationRef.child(id).update({
+                lastUpdate:`"${data.updatedAt}"`,
+                ...req.body
+            }
+                )
+        })
+        .then(data => {
+            res.status(200).json({ result })
         })
         .catch(err => {
             next(err)
         })
     }
 
-    static destroyLocation(req, res, next){
+    static destroyLocation(req, res, next){        
+        // 01. delete di postgres Location
+        // 02. delete di firebase DB
+
+        // admin.ref(`/users/${userid}`).remove()
         let { id } = req.params;
+
+        // 01. delete di postgres Location
         Location.findByPk(id)
         .then(data => {
             if(!data) throw { name: 'NOT_FOUND' }
             else {
                 data.destroy()
-                res.status(200).json({ msg: 'Success Delete Location' })
+                 // 02. delete di firebase DB
+                return db.ref(`Location/${id}`).remove()
             }
+        })
+        .then( data =>{
+            res.status(200).json({ msg: 'Success Delete Location' })
         })
         .catch(err => {
             next(err)

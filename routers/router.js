@@ -11,8 +11,10 @@ router.post('/register', UserController.register)
 router.post('/login', UserController.login)
 
 // Location
-router.post('/locations', LocationController.createLocation)
+
+router.get('/locations/search/:query', LocationController.search)
 router.get('/locations', LocationController.getAllLocation)
+router.post('/locations', LocationController.createLocation)
 router.get('/locations/:id', LocationController.getByIdLocation)
 router.put('/locations/:id', LocationController.editLocation)
 router.delete('/locations/:id', LocationController.destroyLocation)
