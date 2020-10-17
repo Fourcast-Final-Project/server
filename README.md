@@ -433,54 +433,194 @@
 
 ----------------------------------------------------------------
 <br>
-**Add Subcribe **
+**Add Subscribe**
 ----
-   To Add Subcribe with Location Id & User Id 
-
+  To Add Subscribe
 
 * **URL**
 
-    /subscribes
+ /subscribes
 
 * **Method:**
-
-     `POST`
   
+
+     `POST` 
+
 *  **URL Params**
+
+     `none`
 
    **Required:**
  
-   `none`
+    `none`
 
 *  **Headers**
-
-
+ 
      ``````
-    none
+     none
     ``````
+
+
+* **Data Body**
+
+  `````
+  {
+    "UserId": Int,
+    "LocationId": Int
+  }
+  ``````
 
 * **Success Response:**
   
   * **Code:** 201 <br />
-    **Content:** 
-     `````` 
-     {
+   **Content:** 
+    `````` 
+   {
     "msg": "subscribe location succeed"
-     }
+   }
     ``````
  
 * **Error Response:**
 
-    * **Code:** 500 NOT FOUND <br />
-      **Content:** 
-      ```
-      { error : "Internal Server Error" }
-      ```
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ``````
+     { error : "invalid input" }
+    ``````
 
+    OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** 
+    ```
+    { error : "Internal Server Error" }
+    ```
+----------------------------------------------------------------
+<br/>
+
+**Show All Subscribed**
+----
+   To show all Subscribed
+
+* **URL**
+
+     /subscribes
+
+* **Method:**
+
+    `GET` 
+
+*  **URL Params**
+
+      **Required:**
+    
+      `none`
+  
+*  **Headers**
  
+     ``````
+    none
+    ``````
+
+* **Data Body**
+
+    `none`
+    
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    `````` 
+    [
+       "results": [
+        {
+            "id": 10,
+            "UserId": 1,
+            "LocationId": 1,
+            "createdAt": "2020-10-17T04:13:25.050Z",
+            "updatedAt": "2020-10-17T04:13:25.050Z",
+            "Location": {
+                "id": 1,
+                "name": "pancoran 2",
+                "waterLevel": 3.4,
+                "latitude": -6.2523,
+                "longitude": 106.847336,
+                "createdAt": "2020-10-17T03:13:31.762Z",
+                "updatedAt": "2020-10-17T03:22:22.455Z"
+            }
+        },....,....
+    ]
+    ``````
+   
+ 
+* **Error Response:**
+
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** 
+    ```
+    { error : "Internal Server Error" }
+    ```
+
 
 ----------------------------------------------------------------
 <br/>
+
+**Show All Subscribed by Id**
+----
+   To show all Subscribed by Id
+
+* **URL**
+
+     /subscribes/:id
+
+* **Method:**
+
+    `GET` 
+
+*  **URL Params**
+
+      **Required:**
+    
+      `id=[integer]`
+  
+*  **Headers**
+ 
+     ``````
+    none
+    ``````
+
+* **Data Body**
+
+    `none`
+    
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    `````` 
+    {
+    "result": {
+        "id": 10,
+        "UserId": 1,
+        "LocationId": 1,
+        "createdAt": "2020-10-17T04:13:25.050Z",
+        "updatedAt": "2020-10-17T04:13:25.050Z"
+    }
+    }
+    ``````
+   
+ 
+* **Error Response:**
+
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** 
+    ```
+    { error : "Internal Server Error" }
+    ```
+
+
 
 
 
