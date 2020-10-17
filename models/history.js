@@ -12,28 +12,17 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       History.belongsTo(models.User)
+      History.belongsTo(models.Location)
     }
   };
   History.init({
-    location: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "must enter location's name"
-        }
-      }
-    },
-    time: {
-      type: DataTypes.STRING,
+    LocationId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
+        isNumeric: true,  
         notNull: {
-          msg: "invalid history's time"
-        },
-        notEmpty: {
-          args: true,
-          msg: "invalid history's time"
+          msg: 'data didnt have LocationId'
         }
       }
     },

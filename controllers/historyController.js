@@ -15,6 +15,7 @@ class HistoryController {
         })
     }
 
+   
     static readAll(req, res, next) {
         const UserId = req.loggedInUser.id
         History.findAll({
