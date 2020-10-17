@@ -150,7 +150,9 @@
 *  **Headers**
  
      ``````
-     none
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 
@@ -213,7 +215,9 @@
 *  **Headers**
  
      ``````
-     none
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 * **Data Body**
@@ -273,7 +277,9 @@
 *  **Headers**
  
      ``````
-     none
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 * **Data Body**
@@ -335,7 +341,9 @@
 
 
      ``````
-     none
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 * **Success Response:**
@@ -400,7 +408,9 @@
 
 
      ``````
-     none
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 * **Success Response:**
@@ -457,7 +467,9 @@
 *  **Headers**
  
      ``````
-     none
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 
@@ -519,7 +531,9 @@
 *  **Headers**
  
      ``````
-    none
+         {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 * **Data Body**
@@ -587,7 +601,9 @@
 *  **Headers**
  
      ``````
-    none
+         {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
     ``````
 
 * **Data Body**
@@ -620,7 +636,320 @@
     { error : "Internal Server Error" }
     ```
 
+----------------------------------------------------------------
+<br/>
 
 
+**Delete Subscribed By Id Subscribed**
+----
+   To Delete Subscribed by Id Subscribed
 
 
+* **URL**
+
+    /subscribes/:id
+
+* **Method:**
+
+     `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+*  **Headers**
+
+
+     ``````
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
+    ``````
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** 
+     `````` 
+    {
+    "msg": "success removing city from your subscribed list"
+    }
+    ``````
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** 
+    ```
+    { error : "Data not found" }
+    ```
+
+  OR
+
+    * **Code:** 500 INTERNAL SERVER ERROR<br />
+      **Content:** 
+      ```
+      { error : "Internal Server Error" }
+      ```
+
+ 
+
+----------------------------------------------------------------
+<br/>
+
+**Delete All Subscribed **
+----
+   To Delete All Subscribed 
+ 
+
+* **URL**
+
+    /subscribes/:id
+
+* **Method:**
+
+     `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+*  **Headers**
+
+
+     ``````
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
+    ``````
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** 
+     `````` 
+    {
+    "msg": "success removing all cities from user subscribed list"
+    }
+    ``````
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** 
+    ```
+    { error : "Data not found" }
+    ```
+
+  OR
+
+    * **Code:** 500 INTERNAL SERVER ERROR<br />
+      **Content:** 
+      ```
+      { error : "Internal Server Error" }
+      ```
+
+ 
+
+----------------------------------------------------------------
+<br/> 
+
+**Add History**
+----
+  To Add history
+
+* **URL**
+
+ /histories
+
+* **Method:**
+  
+
+     `POST` 
+
+*  **URL Params**
+
+     `none`
+
+   **Required:**
+ 
+    `none`
+
+*  **Headers**
+ 
+     ``````
+          {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
+    ``````
+
+
+* **Data Body**
+
+  `````
+  {
+    "location": string,
+    "time": string,
+    "waterLevel": Double,
+    "UserId": Int
+  }
+  ``````
+
+* **Success Response:**
+  
+  * **Code:** 201 <br />
+   **Content:** 
+    `````` 
+   {
+    "msg": "Success Create History"
+   }
+    ``````
+ 
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** 
+    ``````
+     { error : "invalid input" }
+    ``````
+
+    OR
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** 
+    ```
+    { error : "Internal Server Error" }
+    ```
+
+----------------------------------------------------------------
+<br/>
+
+**Show All History**
+----
+   To show all History
+
+* **URL**
+
+     /histories
+
+* **Method:**
+
+    `GET` 
+
+*  **URL Params**
+
+      **Required:**
+    
+      `none`
+  
+*  **Headers**
+ 
+     ``````
+    {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
+    ``````
+
+* **Data Body**
+
+    `none`
+    
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    `````` 
+    {
+      "results": [
+          {
+              "id": 3,
+              "location": "pancoran",
+              "time": "11 january 2021",
+              "waterLevel": 2.3,
+              "UserId": 1,
+              "createdAt": "2020-10-17T04:35:36.013Z",
+              "updatedAt": "2020-10-17T04:35:36.013Z"
+          }
+      ]
+      }....,....]
+    }
+    ``````
+   
+ 
+* **Error Response:**
+
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** 
+    ```
+    { error : "Internal Server Error" }
+    ```
+
+
+----------------------------------------------------------------
+<br/>
+**Show History By Id**
+----
+   To show history by id user
+
+* **URL**
+
+     /histories/:id
+
+* **Method:**
+
+    `GET` 
+
+*  **URL Params**
+
+      **Required:**
+    
+      `id=[integer]`
+  
+*  **Headers**
+ 
+     ``````
+     {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
+    ``````
+
+* **Data Body**
+
+    `none`
+    
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    `````` 
+    {
+      "result": {
+          "id": 3,
+          "location": "pancoran",
+          "time": "11 january 2021",
+          "waterLevel": 2.3,
+          "UserId": 1,
+          "createdAt": "2020-10-17T04:35:36.013Z",
+          "updatedAt": "2020-10-17T04:35:36.013Z"
+      }
+    }
+    ``````
+   
+ 
+* **Error Response:**
+
+
+  * **Code:** 500 Internal Server Error <br />
+    **Content:** 
+    ```
+    { error : "Internal Server Error" }
+    ```
+
+
+----------------------------------------------------------------
+<br/>
