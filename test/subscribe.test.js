@@ -1,21 +1,31 @@
 const request = require('supertest')
 const app = require('../app')
-const { User, Subscribe } = require('../models')
+const { User, Subscribe, Location } = require('../models')
 
 const subscribe_data = {
-    userId: 1,
-    locationId: 1
+    UserId: 1,
+    LocationId: 1
 }
 
-let userId = null
+let UserId = null
+let LocationId = null
 
 beforeAll(function(done) {
-    User.create({
-        email: 'fourcast@mail.com',
-        password: '123456'
+    Location.create({
+        name: 'depok',
+        waterLevel: 3.3,
+        latitude: -6.385589,
+        longitude: 106.830711
+    })
+    .then(location => {
+        LocationId = location.id
+        return User.create({
+            email: 'fourcast@mail.com',
+            password: '123456'
+        })
     })
     .then(user => {
-        userId = user.id
+        UserId = user.id
         done()
     })
     .catch(err => {
@@ -27,13 +37,14 @@ describe('create subscribe/success case', () => {
     test ('success adding city to subscribed list', (done) => {
         request (app)
             .post('/subscribes')
-            .send(subscribe_data)
+            .send({
+                UserId,
+                LocationId
+            })
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(201)
-               expect(res.body).toHaveProperty('id', expect.any(Number))
-               expect(res.body).toHaveProperty('userId', subscribe_data.userId)
-               expect(res.body).toHaveProperty('locationId', subscribe_data.locationId)
+               expect(res.body).toHaveProperty('msg', "subscribe location succeed")
                done()
             })
     })
@@ -44,11 +55,11 @@ describe('create subscribe/error case', () => {
         request (app)
             .post('/subscribes')
             .send({
-                userId: null,
-                locationId: 1
+                UserId: null,
+                LocationId
             })
             .end( function(err, res) {
-                const errors = ['data didnt have userId']
+                const errors = ['data didnt have UserId']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -61,11 +72,11 @@ describe('create subscribe/error case', () => {
         request (app)
             .post('/subscribes')
             .send({
-                userId: 1,
-                locationId: null
+                UserId,
+                LocationId: null
             })
             .end( function(err, res) {
-                const errors = ['data didnt have locationId']
+                const errors = ['data didnt have LocationId']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -75,16 +86,15 @@ describe('create subscribe/error case', () => {
     })
 })
 
-let locationId = null
-let user_id = null
+let subscribeId = null
 
 beforeAll(function(done) {
     Subscribe.create({
-       userId: 1
+       UserId,
+       LocationId
     })
     .then(data => {
-        locationId = data.id
-        user_id = data.userId
+        subscribeId = data.id
         done()
     })
     .catch(err => done(err))
@@ -95,26 +105,26 @@ describe('read all subscribe/success case', () => {
         request (app)
             .get(`/subscribes/`)
             .send({
-                user_id
+                UserId
             })
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('subscribeds', expect.any(Array))
+               expect(res.body).toHaveProperty('results', expect.any(Array))
                done()
             })
     })
 })
 
 describe('read all subscribe/error case', () => {
-    test ('didnt have userId', (done) => {
+    test ('didnt have UserId', (done) => {
         request (app)
             .get('/subscribes')
             .send({
-                userId: null
+                UserId: null
             })
             .end( function(err, res) {
-                const errors = ['invalid user id']
+                const errors = ['your input data is invalid']
                 if (err) throw err
                 expect(res.status).toBe(400)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -127,30 +137,28 @@ describe('read all subscribe/error case', () => {
 describe('read one subscribe/success case', () => {
     test ('success read one subscribed data', (done) => {
         request (app)
-            .get(`/subscribes/${locationId}`)
+            .get(`/subscribes/${subscribeId}`)
             .send({
-                userId: user_id
+                UserId
             })
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('id', expect.any(Number))
-               expect(res.body).toHaveProperty('userId', userId)
-               expect(res.body).toHaveProperty('locationId', locationId)
+               expect(res.body).toHaveProperty('result', expect.any(Object))
                done()
             })
     })
 })
 
 describe('read one subscribe/error case', () => {
-    test ('didnt have userId', (done) => {
+    test ('didnt have UserId', (done) => {
         request (app)
-            .get(`/subscribes/${locationId}`)
+            .get(`/subscribes/${subscribeId}`)
             .send({
-                userId: null
+                UserId: null
             })
             .end( function(err, res) {
-                const errors = ['invalid user id']
+                const errors = ['your input data is invalid']
                 if (err) throw err
                 expect(res.status).toBe(400)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -159,16 +167,16 @@ describe('read one subscribe/error case', () => {
             })
     })
 
-    test ('didnt have locationId', (done) => {
+    test ('invalid subscribe id', (done) => {
         request (app)
-            .get(`/subscribes/${locationId + 1}`)
+            .get(`/subscribes/${subscribeId + 10}`)
             .send({
-                userId: user_id
+                UserId
             })
             .end( function(err, res) {
-                const errors = ['invalid location id']
+                const errors = ["The data you looking for is not found!!"]
                 if (err) throw err
-                expect(res.status).toBe(400)
+                expect(res.status).toBe(404)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
                 expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                 done()
@@ -179,14 +187,14 @@ describe('read one subscribe/error case', () => {
 describe('delete subscribe/success case', () => {
     test ('success removing city from subscribed list', (done) => {
         request (app)
-            .delete(`/subscribes/${locationId}`)
+            .delete(`/subscribes/${subscribeId}`)
             .send({
-                userId: user_id
+                UserId
             })
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('message', 'success removing city from your subscribed list')
+               expect(res.body).toHaveProperty('msg', 'success removing city from your subscribed list')
                done()
             })
     })
@@ -195,12 +203,12 @@ describe('delete subscribe/success case', () => {
 describe('delete subscribe/error case', () => {
     test ('invalid user id', (done) => {
         request (app)
-            .delete(`/subscribe/${locationId}`)
+            .delete(`/subscribes/${subscribeId}`)
             .send({
-                userId: null
+                UserId: null
             })
             .end( function(err, res) {
-                const errors = ['invalid userId']
+                const errors = ['your input data is invalid']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -211,12 +219,46 @@ describe('delete subscribe/error case', () => {
 
     test ('invalid location id', (done) => {
         request (app)
-            .delete(`/subscribe/${locationId + 1}`)
+            .delete(`/subscribes/${subscribeId + 10}`)
             .send({
-                userId: user_id
+                UserId
             })
             .end( function(err, res) {
-                const errors = ['invalid locationId']
+                const errors = ['The data you looking for is not found!!']
+               if (err) throw err
+               expect(res.status).toBe(404)
+               expect(res.body).toHaveProperty('errors', expect.any(Array))
+               expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+               done()
+            })
+    })
+})
+
+describe('delete all subscribe/success case', () => {
+    test ('success removing all cities from user subscribed list', (done) => {
+        request (app)
+            .delete(`/subscribes`)
+            .send({
+                UserId
+            })
+            .end( function(err, res) {
+               if (err) throw err
+               expect(res.status).toBe(200)
+               expect(res.body).toHaveProperty('msg', 'success removing all cities from user subscribed list')
+               done()
+            })
+    })
+})
+
+describe('delete all subscribe/error case', () => {
+    test ('invalid user id', (done) => {
+        request (app)
+            .delete(`/subscribes`)
+            .send({
+                UserId: null
+            })
+            .end( function(err, res) {
+                const errors = ['your input data is invalid']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))

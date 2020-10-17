@@ -24,6 +24,9 @@ function errorHandler(err, req, res, next){
     } else if(err.name === 'INVALID_EMAIL_OR_PASS'){
         errors.push('Your email or password is wrong!!')
         statusCode = 400
+    } else if(err.name === 'INVALID_DATA') {
+        errors.push('your input data is invalid')
+        statusCode = 400
     } else {
         errors.push(err.msg || 'Internal Server Error')
         statusCode = 500
