@@ -3,6 +3,9 @@ const UserController = require('../controllers/userController.js')
 const LocationController = require('../controllers/locationController')
 const SubscribeController = require('../controllers/subscribeController')
 const HistoryController = require('../controllers/historyController')
+const APIController = require('../controllers/apiController.js')
+
+
 // User
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
@@ -27,5 +30,12 @@ router.get('/histories', HistoryController.readAll)
 router.get('/histories/:id', HistoryController.readOne)
 router.delete('/histories', HistoryController.deleteAll)
 router.delete('/histories/:id', HistoryController.deleteOne)
+
+
+// API weather
+
+router.get('/weather/:loc', APIController.show)
+
+
 
 module.exports = router
