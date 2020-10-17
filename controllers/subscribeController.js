@@ -4,9 +4,15 @@ const { Location } = require('../models')
 
 class SubscribeController {
     static create(req, res, next) {
+        console.log("masuk")
         const { LocationId, UserId } = req.body
+        const idLocation = Number(LocationId)
+        const idUser = Number(UserId)
+        console.log(idLocation, idUser, '<<<<<<< number')        
+        console.log(LocationId, UserId,`<<<<<<< subcirbe add `)
         Subscribe.create({
-            UserId, LocationId
+            UserId: idUser, 
+            LocationId: idLocation
         })
         .then(data => {
             res.status(201).json({ msg: 'subscribe location succeed' })
