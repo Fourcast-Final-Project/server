@@ -953,3 +953,125 @@
 
 ----------------------------------------------------------------
 <br/>
+
+**Delete History By Id History**
+----
+   To Delete History by Id History
+
+
+* **URL**
+
+    /histories/:id
+
+* **Method:**
+
+     `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+*  **Headers**
+
+
+     ``````
+     {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
+    ``````
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** 
+     `````` 
+    {
+    "msg": "success removing city from user history"
+    }
+    ``````
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** 
+    ```
+    { error : "Data not found" }
+    ```
+
+  OR
+
+    * **Code:** 500 INTERNAL SERVER ERROR<br />
+      **Content:** 
+      ```
+      { error : "Internal Server Error" }
+      ```
+
+ 
+
+----------------------------------------------------------------
+<br/>
+
+
+**Delete History**
+----
+   To Delete History
+
+
+* **URL**
+
+    /histories
+
+* **Method:**
+
+     `DELETE`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `id=[integer]`
+
+*  **Headers**
+
+
+     ``````
+     {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZXNpYUBnbWFpbC5jb20iLCJpYXQiOjE1OTg5MjE4OTB9.SYXtZ_jojsEUvo2hiHKhctPLwYmKebGTN6zBvpnCUvE"
+    }
+    ``````
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** 
+     `````` 
+    {
+    "msg": "success removing all cities from user history"
+    }
+    ``````
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** 
+    ```
+    { error : "Data not found" }
+    ```
+
+  OR
+
+    * **Code:** 500 INTERNAL SERVER ERROR<br />
+      **Content:** 
+      ```
+      { error : "Internal Server Error" }
+      ```
+
+ 
+
+----------------------------------------------------------------
+<br/>
+
+
+
