@@ -201,12 +201,12 @@ describe('delete subscribe/error case', () => {
     test ('invalid user id', (done) => {
         request (app)
             .delete(`/subscribes/${subscribeId}`)
-            .set('access_token', access_token)
+            .set('access_token', "dacdscsc")
             .send()
             .end( function(err, res) {
-                const errors = ["You are not authorized for this!!"]
+                const errors = ['user must have access token']
                if (err) throw err
-               expect(res.status).toBe(401)
+               expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                done()

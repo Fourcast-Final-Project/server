@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "postgres",
-    "password": "tm123",
-    "database": "database_fourcast1",
+    "password": "admin",
+    "database": "database_fourcast",
     "host": "localhost",
     "dialect": "postgres"
   },
