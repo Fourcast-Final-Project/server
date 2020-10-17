@@ -16,8 +16,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Subscribe.init({
-    UserId: DataTypes.INTEGER,
-    LocationId: DataTypes.INTEGER
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isNumeric: true,  
+        notNull: {
+          msg: 'data didnt have UserId'
+        }
+      }
+    },
+    LocationId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isNumeric: true,  
+        notNull: {
+          msg: 'data didnt have LocationId'
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Subscribe',
