@@ -5,6 +5,8 @@ const SubscribeController = require('../controllers/subscribeController')
 const HistoryController = require('../controllers/historyController')
 const authentication = require('../middlewares/authentication')
 const { historyAuthorization, subscribeAuthorization } = require('../middlewares/authorization')
+const APIController = require('../controllers/apiController.js')
+
 
 // User
 router.post('/register', UserController.register)
@@ -32,5 +34,12 @@ router.get('/histories', HistoryController.readAll)
 router.get('/histories/:id', historyAuthorization, HistoryController.readOne)
 router.delete('/histories', HistoryController.deleteAll)
 router.delete('/histories/:id', historyAuthorization, HistoryController.deleteOne)
+
+
+// API weather
+
+router.get('/weather/:loc', APIController.show)
+
+
 
 module.exports = router

@@ -1,9 +1,16 @@
 'use strict'
 const { Location } = require('../models')
 
+const db = require('../configFirebase/firebaseDB')
+const LocationRef = db.ref('location') 
+
+
 class LocationController {
     static createLocation(req, res, next){
         let { name, waterLevel, latitude, longitude  } = req.body
+
+        console.log(name, waterLevel, latitude, longitude)
+        
         Location.create({
             name,
             waterLevel,
@@ -19,6 +26,20 @@ class LocationController {
     }
 
     static getAllLocation(req, res, next){
+        
+
+        // let query = 'Palembang' // set default
+        // firebase.database().ref('location').orderByChild("name").equalTo(query).once("value", function(dataSnapshot){
+        //     // console.log(snapshoot.val())
+        //     setData(dataSnapshot.val())
+        //     })
+
+        // LocationRef.orderByChild('yourKey').startAt("Pa").endAt("\uf8ff").once("value", function(dataSnapshot){
+        //  LocationRef.orderByChild("name").equalTo(query).once("value", function(dataSnapshot){
+        //     console.log(dataSnapshot.val())
+        // });
+
+
         Location.findAll()
         .then(data => {
             res.status(200).json({ results: data })
