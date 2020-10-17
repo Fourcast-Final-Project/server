@@ -1,11 +1,12 @@
 const { History } = require('../models')
+const { Location } = require('../models')
 
 class HistoryController {
     static create(req, res, next) {
-        const { location, time, waterLevel } = req.body
+        const { LocationId, time, waterLevel } = req.body
         const UserId = req.loggedInUser.id
         History.create({
-            location, time, waterLevel, UserId
+            LocationId, time, waterLevel, UserId
         })
         .then(data => {
             res.status(201).json({ msg: 'Success Create History' })
@@ -21,10 +22,13 @@ class HistoryController {
         History.findAll({
             where: {
                 UserId
-            }
+            },
+            include: [{
+                model: Location
+            }]
         })
         .then(data => {
-            if (!UserId) throw ({ name: 'INVALID_DATA' })
+            // if (!UserId) throw ({ name: 'INVALID_DATA' })
             res.status(200).json({ results: data })
         })
         .catch(err => {
@@ -38,10 +42,13 @@ class HistoryController {
         History.findOne({
             where: {
                 id, UserId
-            }
+            },
+            include: [{
+                model: Location
+            }]
         })
         .then(data => {
-            if (!UserId) throw ({ name: 'INVALID_DATA' })
+            // if (!UserId) throw ({ name: 'INVALID_DATA' })
             if (!data) throw { name: 'NOT_FOUND' }
             res.status(200).json({ result: data })
         })
@@ -59,7 +66,7 @@ class HistoryController {
             }
         })
         .then(data => {
-            if (!UserId) throw ({ name: 'INVALID_DATA' })
+            // if (!UserId) throw ({ name: 'INVALID_DATA' })
             if(!data) throw { name: 'NOT_FOUND' }
             else {
                 data.destroy()
@@ -79,7 +86,7 @@ class HistoryController {
             }
         })
         .then(data => {
-            if (!UserId) throw ({ name: 'INVALID_DATA' })
+            // if (!UserId) throw ({ name: 'INVALID_DATA' })
             res.status(200).json({ msg: 'success removing all cities from user history' })
         })
         .catch(err => {

@@ -9,7 +9,7 @@ class APIController {
         axios.get(url, {
             params: {
                 q: loc,
-                appid: '733d409fb13b69cd6c672636fce838ba' //process.env.WEATHER_API_ID
+                appid: process.env.API_ID //process.env.WEATHER_API_ID
             }
         })
         .then(response => {
