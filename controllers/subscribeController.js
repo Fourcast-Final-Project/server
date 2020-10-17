@@ -4,7 +4,8 @@ const { Location } = require('../models')
 
 class SubscribeController {
     static create(req, res, next) {
-        const { LocationId, UserId } = req.body
+        const { LocationId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.create({
             UserId, LocationId
         })
@@ -17,7 +18,7 @@ class SubscribeController {
     }
 
     static readAll(req, res, next) {
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.findAll({
             where: {
                 UserId
@@ -37,7 +38,7 @@ class SubscribeController {
 
     static readOne(req, res, next) {
         const { id } = req.params
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.findOne({
             where: {
                 id, UserId
@@ -55,7 +56,7 @@ class SubscribeController {
 
     static deleteOne(req, res, next) {
         const { id } = req.params
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.findOne({
             where: {
                 id, UserId
@@ -75,7 +76,7 @@ class SubscribeController {
     }
 
     static deleteAll(req, res, next) {
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.destroy({
             where: {
                 UserId

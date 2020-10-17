@@ -64,7 +64,10 @@ describe('login/success case', () => {
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
+               expect(res.body).toHaveProperty('access_token', expect.any(String))
                expect(res.body).toHaveProperty('email', user_data.email)
+               expect(res.body).toHaveProperty('id', expect.any(Number))
+               expect(res.body).toHaveProperty('msg', "login success")
                done()
             })
     })
