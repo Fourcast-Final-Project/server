@@ -2,6 +2,8 @@
 
 const { User } = require('../models')
 const { comparePass } = require('../helpers/bcrypt')
+const { generateToken } = require('../helpers/jwt')
+
 
 class UserController {
     static register(req, res, next){
@@ -29,8 +31,14 @@ class UserController {
             if(!data) throw { name: 'INVALID_EMAIL_OR_PASS' }
             let compare = comparePass(req.body.password, data.password)
             if(!compare) throw { name: 'INVALID_EMAIL_OR_PASS' }
-
-            res.status(200).json({ email: data.email })
+            let payload = {id: data.id, email: data.email}
+            let access_token = generateToken(payload)
+            res.status(200).json({
+                msg: 'login success',
+                id: data.id,
+                email: data.email,
+                access_token: access_token
+            })
         })
         .catch(err => {
             next(err)

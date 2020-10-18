@@ -4,12 +4,8 @@ const { Location } = require('../models')
 
 class SubscribeController {
     static create(req, res, next) {
-        console.log("masuk")
-        const { LocationId, UserId } = req.body
-        const idLocation = Number(LocationId)
-        const idUser = Number(UserId)
-        console.log(idLocation, idUser, '<<<<<<< number')        
-        console.log(LocationId, UserId,`<<<<<<< subcirbe add `)
+        const { LocationId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.create({
             UserId: idUser, 
             LocationId: idLocation
@@ -23,7 +19,7 @@ class SubscribeController {
     }
 
     static readAll(req, res, next) {
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.findAll({
             where: {
                 UserId
@@ -43,7 +39,7 @@ class SubscribeController {
 
     static readOne(req, res, next) {
         const { id } = req.params
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.findOne({
             where: {
                 id, UserId
@@ -61,7 +57,7 @@ class SubscribeController {
 
     static deleteOne(req, res, next) {
         const { id } = req.params
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.findOne({
             where: {
                 id, UserId
@@ -81,7 +77,7 @@ class SubscribeController {
     }
 
     static deleteAll(req, res, next) {
-        const { UserId } = req.body
+        const UserId = req.loggedInUser.id
         Subscribe.destroy({
             where: {
                 UserId

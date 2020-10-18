@@ -1,6 +1,7 @@
 const request = require('supertest')
 const app = require('../app')
 const { User, Subscribe, Location } = require('../models')
+const{ generateToken } = require('../helpers/jwt')
 
 const subscribe_data = {
     UserId: 1,
@@ -9,6 +10,7 @@ const subscribe_data = {
 
 let UserId = null
 let LocationId = null
+let access_token = null
 
 beforeAll(function(done) {
     Location.create({
@@ -26,6 +28,7 @@ beforeAll(function(done) {
     })
     .then(user => {
         UserId = user.id
+        access_token = generateToken({ id: user.id, email: user.email })
         done()
     })
     .catch(err => {
@@ -37,8 +40,8 @@ describe('create subscribe/success case', () => {
     test ('success adding city to subscribed list', (done) => {
         request (app)
             .post('/subscribes')
+            .set('access_token', access_token)
             .send({
-                UserId,
                 LocationId
             })
             .end( function(err, res) {
@@ -54,12 +57,12 @@ describe('create subscribe/error case', () => {
     test ('didnt have user_id', (done) => {
         request (app)
             .post('/subscribes')
+            .set('access_token', "sfvdss")
             .send({
-                UserId: null,
                 LocationId
             })
             .end( function(err, res) {
-                const errors = ['data didnt have UserId']
+                const errors = ["user must have access token"]
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -71,8 +74,8 @@ describe('create subscribe/error case', () => {
     test ('didnt have location_id', (done) => {
         request (app)
             .post('/subscribes')
+            .set('access_token', access_token)
             .send({
-                UserId,
                 LocationId: null
             })
             .end( function(err, res) {
@@ -104,9 +107,8 @@ describe('read all subscribe/success case', () => {
     test ('success read all subscribe data', (done) => {
         request (app)
             .get(`/subscribes/`)
-            .send({
-                UserId
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -120,11 +122,10 @@ describe('read all subscribe/error case', () => {
     test ('didnt have UserId', (done) => {
         request (app)
             .get('/subscribes')
-            .send({
-                UserId: null
-            })
+            .set('access_token', 'acacdscsvs')
+            .send()
             .end( function(err, res) {
-                const errors = ['your input data is invalid']
+                const errors = ['user must have access token']
                 if (err) throw err
                 expect(res.status).toBe(400)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -138,9 +139,8 @@ describe('read one subscribe/success case', () => {
     test ('success read one subscribed data', (done) => {
         request (app)
             .get(`/subscribes/${subscribeId}`)
-            .send({
-                UserId
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -154,11 +154,10 @@ describe('read one subscribe/error case', () => {
     test ('didnt have UserId', (done) => {
         request (app)
             .get(`/subscribes/${subscribeId}`)
-            .send({
-                UserId: null
-            })
+            .set('access_token', 'ssvdsass')
+            .send()
             .end( function(err, res) {
-                const errors = ['your input data is invalid']
+                const errors = ['user must have access token']
                 if (err) throw err
                 expect(res.status).toBe(400)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -170,13 +169,12 @@ describe('read one subscribe/error case', () => {
     test ('invalid subscribe id', (done) => {
         request (app)
             .get(`/subscribes/${subscribeId + 10}`)
-            .send({
-                UserId
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
-                const errors = ["The data you looking for is not found!!"]
+                const errors = ["You are not authorized for this!!"]
                 if (err) throw err
-                expect(res.status).toBe(404)
+                expect(res.status).toBe(401)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
                 expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                 done()
@@ -188,9 +186,8 @@ describe('delete subscribe/success case', () => {
     test ('success removing city from subscribed list', (done) => {
         request (app)
             .delete(`/subscribes/${subscribeId}`)
-            .send({
-                UserId
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -204,11 +201,10 @@ describe('delete subscribe/error case', () => {
     test ('invalid user id', (done) => {
         request (app)
             .delete(`/subscribes/${subscribeId}`)
-            .send({
-                UserId: null
-            })
+            .set('access_token', "dacdscsc")
+            .send()
             .end( function(err, res) {
-                const errors = ['your input data is invalid']
+                const errors = ['user must have access token']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -220,13 +216,12 @@ describe('delete subscribe/error case', () => {
     test ('invalid location id', (done) => {
         request (app)
             .delete(`/subscribes/${subscribeId + 10}`)
-            .send({
-                UserId
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
-                const errors = ['The data you looking for is not found!!']
+                const errors = ["You are not authorized for this!!"]
                if (err) throw err
-               expect(res.status).toBe(404)
+               expect(res.status).toBe(401)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                done()
@@ -238,9 +233,8 @@ describe('delete all subscribe/success case', () => {
     test ('success removing all cities from user subscribed list', (done) => {
         request (app)
             .delete(`/subscribes`)
-            .send({
-                UserId
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -254,11 +248,10 @@ describe('delete all subscribe/error case', () => {
     test ('invalid user id', (done) => {
         request (app)
             .delete(`/subscribes`)
-            .send({
-                UserId: null
-            })
+            .set('access_token', "cadcaxa")
+            .send()
             .end( function(err, res) {
-                const errors = ['your input data is invalid']
+                const errors = ['user must have access token']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))

@@ -1,15 +1,16 @@
 const request = require('supertest')
 const app = require('../app')
 const { History, User } = require('../models')
+const { generateToken } = require('../helpers/jwt')
 
 const history_data = {
     location: 'depok',
     time: '11 Januari 2020',
-    waterLevel: 7.5,
-    UserId: null
+    waterLevel: 7.5
 }
 
 let user_id = null
+let access_token = null
 
 beforeAll(function(done) {
     User.create({
@@ -17,8 +18,8 @@ beforeAll(function(done) {
         password: '123456'
     })
     .then(user => {
-        history_data.UserId = user.id
         user_id = user.id
+        access_token = generateToken({ id: user.id, email: user.email })
         done()
     })
     .catch(err => {
@@ -30,6 +31,7 @@ describe('create history/success case', () => {
     test ('success adding history to database', (done) => {
         request (app)
             .post('/histories')
+            .set('access_token', access_token)
             .send(history_data)
             .end( function(err, res) {
                if (err) throw err
@@ -44,11 +46,11 @@ describe('create history/error case', () => {
     test ('invalid location', (done) => {
         request (app)
             .post('/histories')
+            .set('access_token', access_token)
             .send({
                 location: '',
                 time: '11 Januari 2020',
-                waterLevel: 7.5,
-                UserId: null
+                waterLevel: 7.5
             })
             .end( function(err, res) {
                 const errors = ["must enter location's name"]
@@ -63,11 +65,11 @@ describe('create history/error case', () => {
     test ('invalid time', (done) => {
         request (app)
             .post('/histories')
+            .set('access_token', access_token)
             .send({
                 location: 'depok',
                 time: '',
-                waterLevel: 7.5,
-                UserId: user_id
+                waterLevel: 7.5
             })
             .end( function(err, res) {
                 const errors = ["invalid history's time"]
@@ -79,17 +81,17 @@ describe('create history/error case', () => {
             })
     })
 
-    test ('invalid user id', (done) => {
+    test ('invalid access token', (done) => {
         request (app)
             .post('/histories')
+            .set('access_token', "enwnjnskfjnskjncjs")
             .send({
                 location: 'depok',
                 time: '11 Januari 2020',
-                waterLevel: 7.5,
-                UserId: null
+                waterLevel: 7.5
             })
             .end( function(err, res) {
-                const errors = ['histories must have userId']
+                const errors = ['user must have access token']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -103,9 +105,8 @@ describe('read all histories/success case', () => {
     test ('success read all histories data', (done) => {
         request (app)
             .get(`/histories/`)
-            .send({
-                UserId: user_id
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -137,9 +138,7 @@ describe('read one history/success case', () => {
     test ('success read one location data', (done) => {
         request (app)
             .get(`/histories/${historyId}`)
-            .send({
-                UserId: user_id
-            })
+            .set('access_token', access_token)
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -153,6 +152,7 @@ describe('read one history/error case', () => {
     test ('invalid history id', (done) => {
         request (app)
             .get(`/histories/${historyId + 10}`)
+            .set('access_token', access_token)
             .send({
                 UserId: user_id
             })
@@ -171,9 +171,8 @@ describe('delete history/success case', () => {
     test ('success removing history from histories list', (done) => {
         request (app)
             .delete(`/histories/${historyId}`)
-            .send({
-                UserId: user_id
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -187,9 +186,8 @@ describe('delete history/error case', () => {
     test ('invalid history id', (done) => {
         request (app)
             .delete(`/histories/${historyId + 10}`)
-            .send({
-                UserId: user_id
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                 const errors = ['The data you looking for is not found!!']
                 if (err) throw err
@@ -205,9 +203,8 @@ describe('delete all history/success case', () => {
     test ('success removing all cities from user history', (done) => {
         request (app)
             .delete(`/histories`)
-            .send({
-                UserId: user_id
-            })
+            .set('access_token', access_token)
+            .send()
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
@@ -221,11 +218,10 @@ describe('delete all histories/error case', () => {
     test ('invalid user id', (done) => {
         request (app)
             .delete(`/histories`)
-            .send({
-                UserId: null
-            })
+            .set('access_token', "asasvsvfvdfv")
+            .send()
             .end( function(err, res) {
-                const errors = ['your input data is invalid']
+                const errors = ['user must have access token']
                if (err) throw err
                expect(res.status).toBe(400)
                expect(res.body).toHaveProperty('errors', expect.any(Array))
