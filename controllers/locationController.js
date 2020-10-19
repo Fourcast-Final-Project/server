@@ -86,7 +86,26 @@ class LocationController {
 
     static search(req, res, next){
         let { query } = req.params
-        console.log(query, 'dari serach')
+        console.log(query, 'dari search')
+
+        Location.findAll({
+            where: {
+                city: {
+                    [Op.iLike]: `%${query}%`
+                  }
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data })
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
+    static searchInSearch(req, res, next){
+        let { query } = req.params
+        console.log(query, 'dari search')
 
         Location.findAll({
             where: {
