@@ -90,7 +90,7 @@ class LocationController {
 
         Location.findAll({
             where: {
-                city: {
+                name: {
                     [Op.iLike]: `%${query}%`
                   }
             }
@@ -109,7 +109,7 @@ class LocationController {
 
         Location.findAll({
             where: {
-                name: {
+                city: {
                     [Op.iLike]: `%${query}%`
                   }
             }
@@ -182,7 +182,7 @@ class LocationController {
                 next(err)
             })
         } else {
-            res.status(200).json({ msg: `This water doesn't kill you :)`})
+            // res.status(200).json({ msg: `This water doesn't kill you :)`})
             let result
     
              // 01. udpate di postgres Location
@@ -198,7 +198,14 @@ class LocationController {
                 }
             })
             .then(data => {
-                res.status(200).json({ result })
+                // 03. update di firebase DB
+                return LocationRef.child(id).update({
+                    lastUpdate:`"${data.updatedAt}"`,
+                    ...req.body
+                })
+            })
+            .then(data => {
+                res.status(200).json({ data })
             })
             .catch(err => {
                 next(err)
