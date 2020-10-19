@@ -9,11 +9,11 @@ class APIController {
         axios.get(url, {
             params: {
                 q: loc,
-                appid: process.env.API_ID //process.env.WEATHER_API_ID
+                appid: process.env.WEATHER_API_KEY
             }
         })
         .then(response => {
-            //console.log(response.data)
+            console.log(response.data)
             // res.status(200).json({ weather: response.data  })
             res.status(200).json({ name: response.data.name, weather: response.data.weather, main : response.data.main })
         })

@@ -13,12 +13,14 @@ class LocationController {
         // 02. create di postgres History
         // 03. create di firebase DB
 
-        let { name, waterLevel, latitude, longitude  } = req.body
+        let { name, area, city, waterLevel, latitude, longitude  } = req.body
         let id
 
         // 01. create di postgres Location
         Location.create({
-            name,
+            name, // Kebon Jeruk
+            area, // West Jakarta
+            city, // Jakarta
             waterLevel,
             latitude,
             longitude
@@ -38,6 +40,7 @@ class LocationController {
             return LocationRef.child(id).set({
                 id: id,
                 name: name,
+                area: area,
                 waterLevel: waterLevel,
                 latitude: latitude,
                 longitude: longitude,
