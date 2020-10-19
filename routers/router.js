@@ -15,6 +15,7 @@ router.post('/login', UserController.login)
 // Location
 
 router.get('/locations/search/:query', LocationController.search)
+router.get('/locations/find/:query', LocationController.searchInSearch)
 router.get('/locations', LocationController.getAllLocation)
 router.post('/locations', LocationController.createLocation)
 router.get('/locations/:id', LocationController.getByIdLocation)
