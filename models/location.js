@@ -73,7 +73,11 @@ module.exports = (sequelize, DataTypes) => {
         }
         
       }
-    } 
+    },
+    danger: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'Location',
