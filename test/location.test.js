@@ -6,7 +6,10 @@ const location_data = {
     name: 'depok',
     waterLevel: 3.3,
     latitude: -6.385589,
-    longitude: 106.830711
+    longitude: 106.830711,
+    city: 'west jakarta',
+    area: 'jakarta',
+    danger: false
 }
 
 describe('create location/success case', () => {
@@ -31,7 +34,10 @@ describe('create location/error case', () => {
                 name: '',
                 waterLevel: 3.3,
                 latitude: -6.385589,
-                longitude: 106.830711
+                longitude: 106.830711,
+                city: 'west jakarta',
+                area: 'jakarta',
+                danger: false
             })
             .end( function(err, res) {
                 const errors = ["must enter location's name"]
@@ -50,7 +56,10 @@ describe('create location/error case', () => {
                 name: 'depok',
                 waterLevel: 33,
                 latitude: -93,
-                longitude: 106.830711
+                longitude: 106.830711,
+                city: 'west jakarta',
+                area: 'jakarta',
+                danger: false
             })
             .end( function(err, res) {
                 const errors = ['latitude range must be between -90 up to +90 degrees']
@@ -69,7 +78,10 @@ describe('create location/error case', () => {
                 name: 'depok',
                 waterLevel: 33,
                 latitude: -6.385589,
-                longitude: 186.830711
+                longitude: 186.830711,
+                city: 'west jakarta',
+                area: 'jakarta',
+                danger: false
             })
             .end( function(err, res) {
                 const errors = ['longitude range must be between -180 up to +180 degrees']
@@ -103,7 +115,10 @@ beforeAll(function(done) {
         name: 'depok',
         waterLevel: 3.3,
         latitude: -6.385589,
-        longitude: 106.830711
+        longitude: 106.830711,
+        city: 'west jakarta',
+        area: 'jakarta',
+        danger: false
     })
     .then(location => {
         locationId = location.id
