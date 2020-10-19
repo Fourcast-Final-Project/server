@@ -121,44 +121,70 @@ class LocationController {
         // 03. update di firebase DB
 
         let { id } = req.params
-
-        let result
-
-         // 01. udpate di postgres Location
-        Location.findByPk(id)
-        .then(data => {
-            if(!data) throw { name: 'NOT_FOUND' }
-            else {
-                return data.update({
-                    ...data,
+        // console.log(req.body, "INI WATER LEVEL DRI CONTROLLER>>>>>>>>>>>>>>>>>>>>")
+        if (req.body.waterLevel > 50) {
+            let result
+    
+             // 01. udpate di postgres Location
+            Location.findByPk(id)
+            .then(data => {
+                if(!data) throw { name: 'NOT_FOUND' }
+                else {
+                    return data.update({
+                        ...data,
+                        ...req.body,
+                        danger: true
+                    })
+                }
+            })
+            .then(data => {
+                result = data
+                let payload = {
+                    LocationId : data.id,
+                    waterLevel : data.waterLevel,
+                    image: req.body.image,
+                    UserId : 1// default dulu sementara
+                }
+                // 02. create di postgres History
+                return History.create(payload)
+            })
+            .then(data => {
+                // 03. update di firebase DB
+                return LocationRef.child(id).update({
+                    lastUpdate:`"${data.updatedAt}"`,
                     ...req.body
-                })
-            }
-        })
-        .then(data => {
-            result = data
-            let payload = {
-                LocationId : data.id,
-                waterLevel : data.waterLevel,
-                UserId : 1// default dulu sementara
-            }
-            // 02. create di postgres History
-            return History.create(payload)
-        })
-        .then(data => {
-            // 03. update di firebase DB
-            return LocationRef.child(id).update({
-                lastUpdate:`"${data.updatedAt}"`,
-                ...req.body
-            }
-                )
-        })
-        .then(data => {
-            res.status(200).json({ result })
-        })
-        .catch(err => {
-            next(err)
-        })
+                }
+                    )
+            })
+            .then(data => {
+                res.status(200).json({ result })
+            })
+            .catch(err => {
+                next(err)
+            })
+        } else {
+            res.status(200).json({ msg: `This water doesn't kill you :)`})
+            let result
+    
+             // 01. udpate di postgres Location
+            Location.findByPk(id)
+            .then(data => {
+                if(!data) throw { name: 'NOT_FOUND' }
+                else {
+                    return data.update({
+                        ...data,
+                        ...req.body,
+                        danger: false
+                    })
+                }
+            })
+            .then(data => {
+                res.status(200).json({ result })
+            })
+            .catch(err => {
+                next(err)
+            })
+        }
     }
 
     static destroyLocation(req, res, next){        
@@ -186,24 +212,28 @@ class LocationController {
         })
     }
 
-    static report(req, res, next) {
-        let { id } = req.params;
-        Location.findByPk(id)
-        .then(data => {
-            if (!data) throw { name: 'NOT FOUND' }
-            Location.update({ danger: true }, {
-                where: {
-                    id
-                }
-            })
-        })
-        .then(data => {
-            res.status(200).json({ msg: 'Success Report Location' });
-        })
-        .catch(err => {
-            next(err);
-        })
-    }
+    // static report(req, res, next) {
+    //     const { id } = req.params;
+    //     Location.findByPk(id)
+    //     .then(data => {
+    //         if (!data) throw { name: 'NOT FOUND' }
+    //         Location.update({ danger: true }, {
+    //             where: {
+    //                 id
+    //             }
+    //         })
+    //     })
+    //     .then(data => {
+    //         return Location.findByPk(id)
+    //     })
+    //     .then(data => {
+    //         console.log(data, 'INI DATANYA')
+    //         res.status(200).json(data)
+    //     })
+    //     .catch(err => {
+    //         next(err);
+    //     })
+    // }
 }
 
 module.exports = LocationController
