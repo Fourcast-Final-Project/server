@@ -185,6 +185,25 @@ class LocationController {
             next(err)
         })
     }
+
+    static report(req, res, next) {
+        let { id } = req.params;
+        Location.findByPk(id)
+        .then(data => {
+            if (!data) throw { name: 'NOT FOUND' }
+            Location.update({ danger: true }, {
+                where: {
+                    id
+                }
+            })
+        })
+        .then(data => {
+            res.status(200).json({ msg: 'Success Report Location' });
+        })
+        .catch(err => {
+            next(err);
+        })
+    }
 }
 
 module.exports = LocationController
