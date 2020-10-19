@@ -83,7 +83,7 @@ class LocationController {
 
     static search(req, res, next){
         let { query } = req.params
-        console.log(query, 'dari serach')
+        console.log(query, 'dari search')
 
         Location.findAll({
             where: {
