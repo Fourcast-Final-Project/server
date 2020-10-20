@@ -15,6 +15,7 @@ async function authentication (req, res, next) {
             })
             if (!user) throw {name: 'AUTHENTICATION_FAILED'}
             else {
+                console.log('sukses authentic')
                 req.loggedInUser = {id: user.id, email: user.email}
                 next()
             }

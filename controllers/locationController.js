@@ -84,6 +84,21 @@ class LocationController {
         })
     }
 
+    static findAllByCity(req, res, next) {
+        let { city } = req.params
+        Location.findAll({
+            where: {
+                city
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data })
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
     static search(req, res, next){
         let { query } = req.params
         console.log(query, 'dari search')
