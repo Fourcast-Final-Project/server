@@ -35,7 +35,8 @@ router.delete('/subscribes/:id', subscribeAuthorization, SubscribeController.del
 // History
 router.post('/histories', HistoryController.create)
 router.get('/histories', HistoryController.readAll)
-router.get('/histories/:id', historyAuthorization, HistoryController.readOne)
+// router.get('/histories/:id', historyAuthorization, HistoryController.readOne)
+ router.get('/histories/:id', HistoryController.fetchByLocation)
 router.delete('/histories', HistoryController.deleteAll)
 router.delete('/histories/:id', historyAuthorization, HistoryController.deleteOne)
 
