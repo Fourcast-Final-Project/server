@@ -192,6 +192,7 @@ class LocationController {
                     )
             })
             .then(data => {
+
                return Subscribe.findAll({
                    where: { LocationId: result.id },
                    include: [ User ]
@@ -249,7 +250,7 @@ class LocationController {
                 })
             })
             .then(data => {
-                res.status(200).json({ data })
+                res.status(200).json({ msg:"Success Update Location" })
             })
             .catch(err => {
                 next(err)
@@ -257,31 +258,30 @@ class LocationController {
         }
     }
 
-    static destroyLocation(req, res, next){        
-        // 01. delete di postgres Location
-        // 02. delete di firebase DB
+    // static destroyLocation(req, res, next){        
+    //     // 01. delete di postgres Location
+    //     // 02. delete di firebase DB
 
-        // admin.ref(`/users/${userid}`).remove()
-        let { id } = req.params;
+    //     // admin.ref(`/users/${userid}`).remove()
+    //     let { id } = req.params;
 
-        // 01. delete di postgres Location
-        Location.findByPk(id)
-        .then(data => {
-            if(!data) throw { name: 'NOT_FOUND' }
-            else {
-                data.destroy()
-                 // 02. delete di firebase DB
-                return db.ref(`Location/${id}`).remove()
-            }
-        })
-        .then( data =>{
-            res.status(200).json({ msg: 'Success Delete Location' })
-        })
-        .catch(err => {
-            next(err)
-        })
-    }
-
+    //     // 01. delete di postgres Location
+    //     Location.findByPk(id)
+    //     .then(data => {
+    //         if(!data) throw { name: 'NOT_FOUND' }
+    //         else {
+    //             data.destroy()
+    //              // 02. delete di firebase DB
+    //             return db.ref(`Location/${id}`).remove()
+    //         }
+    //     })
+    //     .then( data =>{
+    //         res.status(200).json({ msg: 'Success Delete Location' })
+    //     })
+    //     .catch(err => {
+    //         next(err)
+    //     })
+    // }
     // static report(req, res, next) {
     //     const { id } = req.params;
     //     Location.findByPk(id)

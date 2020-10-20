@@ -4,9 +4,9 @@ const { History, User } = require('../models')
 const { generateToken } = require('../helpers/jwt')
 
 const history_data = {
-    location: 'depok',
-    time: '11 Januari 2020',
-    waterLevel: 7.5
+    LocationId: 2,
+    waterLevel: 7.5,
+    image: "img.png"
 }
 
 let user_id = null
@@ -48,12 +48,12 @@ describe('create history/error case', () => {
             .post('/histories')
             .set('access_token', access_token)
             .send({
-                location: '',
-                time: '11 Januari 2020',
-                waterLevel: 7.5
+                LocationId: '',
+                waterLevel: 7.5,
+                image: "img.png"
             })
             .end( function(err, res) {
-                const errors = ["must enter location's name"]
+                const errors = ["Validation isNumeric on LocationId failed"]
                 if (err) throw err
                 expect(res.status).toBe(400)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
@@ -62,41 +62,21 @@ describe('create history/error case', () => {
             })
     })
 
-    test ('invalid time', (done) => {
+    test ('location null', (done) => {
         request (app)
             .post('/histories')
             .set('access_token', access_token)
             .send({
-                location: 'depok',
-                time: '',
-                waterLevel: 7.5
+                waterLevel: 7.5,
+                image: "img.png"
             })
             .end( function(err, res) {
-                const errors = ["invalid history's time"]
+                const errors = ["data didnt have LocationId"]
                 if (err) throw err
                 expect(res.status).toBe(400)
                 expect(res.body).toHaveProperty('errors', expect.any(Array))
                 expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                 done()
-            })
-    })
-
-    test ('invalid access token', (done) => {
-        request (app)
-            .post('/histories')
-            .set('access_token', "enwnjnskfjnskjncjs")
-            .send({
-                location: 'depok',
-                time: '11 Januari 2020',
-                waterLevel: 7.5
-            })
-            .end( function(err, res) {
-                const errors = ['user must have access token']
-               if (err) throw err
-               expect(res.status).toBe(400)
-               expect(res.body).toHaveProperty('errors', expect.any(Array))
-               expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-               done()
             })
     })
 })
@@ -120,8 +100,7 @@ let historyId = null
 
 beforeAll(function(done) {
     History.create({
-        location: 'depok',
-        time: '11 Januari 2020',
+        LocationId: 2,
         waterLevel: 7.5,
         UserId: user_id
     })
@@ -148,24 +127,6 @@ describe('read one history/success case', () => {
     })
 })
 
-describe('read one history/error case', () => {
-    test ('invalid history id', (done) => {
-        request (app)
-            .get(`/histories/${historyId + 10}`)
-            .set('access_token', access_token)
-            .send({
-                UserId: user_id
-            })
-            .end( function(err, res) {
-                const errors = ['The data you looking for is not found!!']
-                if (err) throw err
-                expect(res.status).toBe(404)
-                expect(res.body).toHaveProperty('errors', expect.any(Array))
-                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-                done()
-            })
-    })
-})
 
 describe('delete history/success case', () => {
     test ('success removing history from histories list', (done) => {
