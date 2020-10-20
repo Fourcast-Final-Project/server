@@ -22,7 +22,7 @@ class UserController {
     }
 
     static login(req, res, next){
-        // console.log('masuk login')
+        console.log('masuk login')
         User.findOne({
             where: { email: req.body.email }
         })

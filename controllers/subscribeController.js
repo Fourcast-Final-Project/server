@@ -5,12 +5,22 @@ const { Location } = require('../models')
 class SubscribeController {
     static create(req, res, next) {
         const { LocationId } = req.body
+        console.log("masuk subss", LocationId)
         const UserId = req.loggedInUser.id
-        Subscribe.create({
-            UserId, LocationId
+        Subscribe.findOrCreate({
+            where: {
+                UserId, 
+                LocationId
+            }
         })
         .then(data => {
-            res.status(201).json({ msg: 'subscribe location succeed' })
+             //console.log (data[1])
+            if(data[1] === false){
+                res.status(200).json({ msg: 'you already subscribe for this location before' })
+            } else {
+                res.status(201).json({ msg: 'subscribe location succeed' })
+            }
+            
         })
         .catch(err => {
             next(err)

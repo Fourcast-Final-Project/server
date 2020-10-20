@@ -57,6 +57,26 @@ class HistoryController {
         })
     }
 
+    static fetchByLocation(req, res, next) {
+        const { id } = req.params
+        History.findAll({
+            where: {
+                LocationId: id
+            },
+            include: [{
+                model: Location
+            }]
+        })
+        .then(data => {
+            // if (!UserId) throw ({ name: 'INVALID_DATA' })
+            if (!data) throw { name: 'NOT_FOUND' }
+            res.status(200).json({ result: data })
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
     static deleteOne(req, res, next) {
         const { id } = req.params
         const UserId = req.loggedInUser.id
