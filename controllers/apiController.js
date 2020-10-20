@@ -4,11 +4,12 @@ const axios = require('axios');
 class APIController {
     static show(req, res, next){
         let { loc } = req.params
+        //console.log(loc,process.env.WEATHER_API_KEY, "masukl")
         let url = 'http://api.openweathermap.org/data/2.5/weather'
         axios.get(url, {
             params: {
                 q: loc,
-                appid: process.env.WEATHER_API_ID //process.env.WEATHER_API_ID
+                appid: process.env.WEATHER_API_KEY
             }
         })
         .then(response => {

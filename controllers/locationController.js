@@ -83,6 +83,21 @@ class LocationController {
         })
     }
 
+    static findAllByCity(req, res, next) {
+        let { city } = req.params
+        Location.findAll({
+            where: {
+                city
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data })
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
     static search(req, res, next){
         let { query } = req.params
         console.log(query, 'dari search')
@@ -170,7 +185,6 @@ class LocationController {
                 // 03. update di firebase DB
                 return LocationRef.child(id).update({
                     lastUpdate:`"${data.updatedAt}"`,
-
                     ...req.body
                 }
                     )
@@ -237,7 +251,6 @@ class LocationController {
     //         next(err)
     //     })
     // }
-
     // static report(req, res, next) {
     //     const { id } = req.params;
     //     Location.findByPk(id)

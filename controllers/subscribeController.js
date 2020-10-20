@@ -7,11 +7,9 @@ class SubscribeController {
         const { LocationId } = req.body
         console.log("masuk subss", LocationId)
         const UserId = req.loggedInUser.id
-
         // Subscribe.create({
         //     UserId: idUser, 
         //     LocationId: idLocation
-
         Subscribe.findOrCreate({
             where: {
                 UserId, 
