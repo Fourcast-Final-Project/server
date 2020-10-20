@@ -7,6 +7,9 @@ function errorHandler(err, req, res, next){
             errors.push(err.errors[i].message)
         } 
         statusCode = 400
+//     } else if (err.name === 'NOT LOGGED IN') {
+//         errors.push('You are not logged in, you cannot log out')
+//         statusCode = 400
     // } else if(err.name === 'SequelizeUniqueConstraintError'){
     //     errors.push('Email already exists!!')
     //     statusCode = 400
