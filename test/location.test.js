@@ -129,6 +129,50 @@ beforeAll(function(done) {
     })
 })
 
+describe('create location/success case', () => {
+    test ('success adding city to database', (done) => {
+        request (app)
+            .put(`/locations/${locationId}`)
+            .send({
+                name: `depok barat`,
+                waterLevel: 3.3,
+                latitude: -6.385589,
+                longitude: 106.830711,
+                city: 'west jakarta',
+                area: 'jakarta',
+                danger: true
+            })
+            .end( function(err, res) {
+               if (err) throw err
+               expect(res.status).toBe(200)
+               expect(res.body).toHaveProperty('msg', "Success Update Location")
+               done()
+            })
+    })
+})
+
+describe('create location/success case', () => {
+    test ('success adding city to database', (done) => {
+        request (app)
+            .put(`/locations/${locationId}`)
+            .send({
+                name: `depok barat`,
+                waterLevel: 51,
+                latitude: -6.385589,
+                longitude: 106.830711,
+                city: 'west jakarta',
+                area: 'jakarta',
+                danger: true
+            })
+            .end( function(err, res) {
+               if (err) throw err
+               expect(res.status).toBe(200)
+               expect(res.body).toHaveProperty('msg', "Success Update Location")
+               done()
+            })
+    })
+})
+
 describe('read one location/success case', () => {
     test ('success read one location data', (done) => {
         request (app)
@@ -158,32 +202,59 @@ describe('read one location/error case', () => {
     })
 })
 
-describe('delete location/success case', () => {
-    test ('success removing city from location list', (done) => {
+// describe('delete location/success case', () => {
+//     test ('success removing city from location list', (done) => {
+//         request (app)
+//             .delete(`/locations/${locationId}`)
+//             .send()
+//             .end( function(err, res) {
+//                if (err) throw err
+//                expect(res.status).toBe(200)
+//                expect(res.body).toHaveProperty('msg', 'Success Delete Location')
+//                done()
+//             })
+//     })
+// })
+
+// describe('delete location/error case', () => {
+//     test ('invalid location id', (done) => {
+//         request (app)
+//             .delete(`/locations/${locationId + 10}`)
+//             .send()
+//             .end( function(err, res) {
+//                 const errors = ['The data you looking for is not found!!']
+//                 if (err) throw err
+//                 expect(res.status).toBe(404)
+//                 expect(res.body).toHaveProperty('errors', expect.any(Array))
+//                 expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+//                 done()
+//             })
+//     })
+// })
+
+
+describe('Search by Name', () => {
+    test ('success search by name', (done) => {
         request (app)
-            .delete(`/locations/${locationId}`)
-            .send()
+            .get(`/locations/search/${location_data.name}`)
             .end( function(err, res) {
                if (err) throw err
                expect(res.status).toBe(200)
-               expect(res.body).toHaveProperty('msg', 'Success Delete Location')
+               expect(res.body).toHaveProperty('data', expect.any(Array))
                done()
             })
     })
 })
 
-describe('delete location/error case', () => {
-    test ('invalid location id', (done) => {
+describe('Search by City', () => {
+    test ('success search by City', (done) => {
         request (app)
-            .delete(`/locations/${locationId + 10}`)
-            .send()
+            .get(`/locations/find/${location_data.area}`)
             .end( function(err, res) {
-                const errors = ['The data you looking for is not found!!']
-                if (err) throw err
-                expect(res.status).toBe(404)
-                expect(res.body).toHaveProperty('errors', expect.any(Array))
-                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
-                done()
+               if (err) throw err
+               expect(res.status).toBe(200)
+               expect(res.body).toHaveProperty('data', expect.any(Array))
+               done()
             })
     })
 })
