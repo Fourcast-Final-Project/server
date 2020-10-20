@@ -13,7 +13,10 @@ function errorHandler(err, req, res, next){
     } else if(err.name === 'INVALID_TOKEN'){
         errors.push('Your token is invalid!!')
         statusCode = 400
-    } else if(err.name === 'AUTHENTICATION_FAILED'){
+    } else if (err.name === 'NOT LOGGED IN') {
+        errors.push('You are not logged in, you cannot log out')
+        statusCode = 400
+     } else if(err.name === 'AUTHENTICATION_FAILED'){
         errors.push('Your authentication failed!!')
         statusCode = 401
     } else if(err.name === 'NOT_FOUND'){
