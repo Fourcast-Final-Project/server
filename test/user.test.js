@@ -6,6 +6,7 @@ const user_data = {
     password: '123456'
 }
 
+
 describe('register/success case', () => {
     test ('enter email and password correctly', (done) => {
         request (app)
