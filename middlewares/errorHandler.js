@@ -1,4 +1,5 @@
 function errorHandler(err, req, res, next){
+    console.log(err, 'INI DRI ERR HANDLER')
     let errors = [];
     let statusCode;
     if(err.name === 'SequelizeValidationError'){

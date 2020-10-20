@@ -39,6 +39,9 @@ module.exports = (sequelize, DataTypes) => {
           msg: "histories must have userId"
         }
       }
+    },
+    image: {
+     type: DataTypes.STRING
     }
   }, {
     sequelize,

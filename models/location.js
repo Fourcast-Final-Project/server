@@ -26,6 +26,26 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    area: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "must enter location's area"
+        }
+      }
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "must enter location's city"
+        }
+      }
+    },
     waterLevel: DataTypes.DOUBLE,
     latitude: {
       type: DataTypes.DOUBLE,
@@ -53,7 +73,11 @@ module.exports = (sequelize, DataTypes) => {
         }
         
       }
-    } 
+    },
+    danger: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'Location',

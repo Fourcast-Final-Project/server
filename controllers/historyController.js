@@ -3,10 +3,10 @@ const { Location } = require('../models')
 
 class HistoryController {
     static create(req, res, next) {
-        const { LocationId, time, waterLevel } = req.body
+        const { LocationId, time, waterLevel, image } = req.body
         const UserId = req.loggedInUser.id
         History.create({
-            LocationId, time, waterLevel, UserId
+            LocationId, time, waterLevel, UserId, image
         })
         .then(data => {
             res.status(201).json({ msg: 'Success Create History' })
