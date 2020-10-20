@@ -2,7 +2,6 @@
 const { Location, History } = require('../models')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-
 const db = require('../configFirebase/firebaseDB')
 const LocationRef = db.ref('Location') 
 
@@ -86,11 +85,30 @@ class LocationController {
 
     static search(req, res, next){
         let { query } = req.params
-        console.log(query, 'dari serach')
+        console.log(query, 'dari search')
 
         Location.findAll({
             where: {
                 name: {
+                    [Op.iLike]: `%${query}%`
+                  }
+            }
+        })
+        .then(data => {
+            res.status(200).json({ data })
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
+    static searchInSearch(req, res, next){
+        let { query } = req.params
+        console.log(query, 'dari search')
+
+        Location.findAll({
+            where: {
+                city: {
                     [Op.iLike]: `%${query}%`
                   }
             }
@@ -152,18 +170,19 @@ class LocationController {
                 // 03. update di firebase DB
                 return LocationRef.child(id).update({
                     lastUpdate:`"${data.updatedAt}"`,
+
                     ...req.body
                 }
                     )
             })
             .then(data => {
-                res.status(200).json({ result })
+                res.status(200).json({ msg:"Success Update Location" })
             })
             .catch(err => {
                 next(err)
             })
         } else {
-            res.status(200).json({ msg: `This water doesn't kill you :)`})
+            // res.status(200).json({ msg: `This water doesn't kill you :)`})
             let result
     
              // 01. udpate di postgres Location
@@ -179,7 +198,14 @@ class LocationController {
                 }
             })
             .then(data => {
-                res.status(200).json({ result })
+                // 03. update di firebase DB
+                return LocationRef.child(id).update({
+                    lastUpdate:`"${data.updatedAt}"`,
+                    ...req.body
+                })
+            })
+            .then(data => {
+                res.status(200).json({ msg:"Success Update Location" })
             })
             .catch(err => {
                 next(err)
@@ -187,30 +213,30 @@ class LocationController {
         }
     }
 
-    static destroyLocation(req, res, next){        
-        // 01. delete di postgres Location
-        // 02. delete di firebase DB
+    // static destroyLocation(req, res, next){        
+    //     // 01. delete di postgres Location
+    //     // 02. delete di firebase DB
 
-        // admin.ref(`/users/${userid}`).remove()
-        let { id } = req.params;
+    //     // admin.ref(`/users/${userid}`).remove()
+    //     let { id } = req.params;
 
-        // 01. delete di postgres Location
-        Location.findByPk(id)
-        .then(data => {
-            if(!data) throw { name: 'NOT_FOUND' }
-            else {
-                data.destroy()
-                 // 02. delete di firebase DB
-                return db.ref(`Location/${id}`).remove()
-            }
-        })
-        .then( data =>{
-            res.status(200).json({ msg: 'Success Delete Location' })
-        })
-        .catch(err => {
-            next(err)
-        })
-    }
+    //     // 01. delete di postgres Location
+    //     Location.findByPk(id)
+    //     .then(data => {
+    //         if(!data) throw { name: 'NOT_FOUND' }
+    //         else {
+    //             data.destroy()
+    //              // 02. delete di firebase DB
+    //             return db.ref(`Location/${id}`).remove()
+    //         }
+    //     })
+    //     .then( data =>{
+    //         res.status(200).json({ msg: 'Success Delete Location' })
+    //     })
+    //     .catch(err => {
+    //         next(err)
+    //     })
+    // }
 
     // static report(req, res, next) {
     //     const { id } = req.params;

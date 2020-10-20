@@ -15,12 +15,13 @@ router.post('/login', UserController.login)
 // Location
 
 router.get('/locations/search/:query', LocationController.search)
+router.get('/locations/find/:query', LocationController.searchInSearch)
 router.get('/locations', LocationController.getAllLocation)
 router.post('/locations', LocationController.createLocation)
 router.get('/locations/:id', LocationController.getByIdLocation)
 router.put('/locations/:id', LocationController.editLocation)
 // router.put('/locations/report/:id', LocationController.report)
-router.delete('/locations/:id', LocationController.destroyLocation)
+// router.delete('/locations/:id', LocationController.destroyLocation)
 
 router.use(authentication)
 
@@ -34,7 +35,8 @@ router.delete('/subscribes/:id', subscribeAuthorization, SubscribeController.del
 // History
 router.post('/histories', HistoryController.create)
 router.get('/histories', HistoryController.readAll)
-router.get('/histories/:id', historyAuthorization, HistoryController.readOne)
+// router.get('/histories/:id', historyAuthorization, HistoryController.readOne)
+router.get('/histories/:id', HistoryController.fetchByLocation)
 router.delete('/histories', HistoryController.deleteAll)
 router.delete('/histories/:id', historyAuthorization, HistoryController.deleteOne)
 
