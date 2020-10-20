@@ -1,7 +1,8 @@
 'use strict'
-const { Location, History } = require('../models')
+const { Location, History, Subscribe, User } = require('../models')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const axios = require('axios')
 
 const db = require('../configFirebase/firebaseDB')
 const LocationRef = db.ref('Location') 
@@ -30,7 +31,7 @@ class LocationController {
             let payload = {
                 LocationId : data.id,
                 waterLevel : data.waterLevel,
-                UserId : 1// default dulu sementara
+                UserId : req.loggedInUser.id// default dulu sementara
             }
             // 02. create di postgres History
             return History.create(payload)
@@ -155,7 +156,7 @@ class LocationController {
         // 03. update di firebase DB
 
         let { id } = req.params
-        // console.log(req.body, "INI WATER LEVEL DRI CONTROLLER>>>>>>>>>>>>>>>>>>>>")
+        console.log(req.body, "INI WATER LEVEL DRI CONTROLLER>>>>>>>>>>>>>>>>>>>>")
         if (req.body.waterLevel > 50) {
             let result
     
@@ -177,7 +178,7 @@ class LocationController {
                     LocationId : data.id,
                     waterLevel : data.waterLevel,
                     image: req.body.image,
-                    UserId : 1// default dulu sementara
+                    UserId : 4 //req.loggedInUser.id// default dulu sementara
                 }
                 // 02. create di postgres History
                 return History.create(payload)
@@ -189,6 +190,35 @@ class LocationController {
                     ...req.body
                 }
                     )
+            })
+            .then(data => {
+
+               return Subscribe.findAll({
+                   where: { LocationId: result.id },
+                   include: [ User ]
+               })
+                
+            })
+            .then(data => {
+                
+                 Promise.all(data.map(item => {
+                    axios({
+                      method: 'post',
+                      url: `https://exp.host/--/api/v2/push/send`,
+                      headers: {
+                        accept: 'application/json',
+                        'content-type': 'application/json'
+                    },
+                      data: JSON.stringify(
+                            {
+                             to: item.User.expoToken,
+                             sound: "default",
+                             body: `Hi Team FOURCAST ${item.User.email}!, DANGER ALERT FOR ${result.name}`
+                           }
+                           
+                         )
+                    });
+                  }));
             })
             .then(data => {
                 res.status(200).json({ result })
@@ -220,7 +250,7 @@ class LocationController {
                 })
             })
             .then(data => {
-                res.status(200).json({ data })
+                res.status(200).json({ msg:"Success Update Location" })
             })
             .catch(err => {
                 next(err)
@@ -228,31 +258,30 @@ class LocationController {
         }
     }
 
-    static destroyLocation(req, res, next){        
-        // 01. delete di postgres Location
-        // 02. delete di firebase DB
+    // static destroyLocation(req, res, next){        
+    //     // 01. delete di postgres Location
+    //     // 02. delete di firebase DB
 
-        // admin.ref(`/users/${userid}`).remove()
-        let { id } = req.params;
+    //     // admin.ref(`/users/${userid}`).remove()
+    //     let { id } = req.params;
 
-        // 01. delete di postgres Location
-        Location.findByPk(id)
-        .then(data => {
-            if(!data) throw { name: 'NOT_FOUND' }
-            else {
-                data.destroy()
-                 // 02. delete di firebase DB
-                return db.ref(`Location/${id}`).remove()
-            }
-        })
-        .then( data =>{
-            res.status(200).json({ msg: 'Success Delete Location' })
-        })
-        .catch(err => {
-            next(err)
-        })
-    }
-
+    //     // 01. delete di postgres Location
+    //     Location.findByPk(id)
+    //     .then(data => {
+    //         if(!data) throw { name: 'NOT_FOUND' }
+    //         else {
+    //             data.destroy()
+    //              // 02. delete di firebase DB
+    //             return db.ref(`Location/${id}`).remove()
+    //         }
+    //     })
+    //     .then( data =>{
+    //         res.status(200).json({ msg: 'Success Delete Location' })
+    //     })
+    //     .catch(err => {
+    //         next(err)
+    //     })
+    // }
     // static report(req, res, next) {
     //     const { id } = req.params;
     //     Location.findByPk(id)

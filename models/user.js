@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: {
           args: true,
           msg: 'Invalid Email Address'
-        }
+        },
+        
       }
     },
     password: {
@@ -35,6 +36,9 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'password character must be more than 5 and less than 15'
         }
       }
+    },
+    expoToken: {
+      type: DataTypes.STRING
     }
   }, {
     sequelize,
