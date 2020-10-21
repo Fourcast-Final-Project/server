@@ -155,6 +155,7 @@ class LocationController {
         // 03. update di firebase DB
 
         let { id } = req.params
+        console.log(id, 'INI DRI EDIT LOC!!!!!!!!!')
         // console.log(req.body, "INI WATER LEVEL DRI CONTROLLER>>>>>>>>>>>>>>>>>>>>")
         if (req.body.waterLevel > 50) {
             let result
@@ -162,6 +163,7 @@ class LocationController {
              // 01. udpate di postgres Location
             Location.findByPk(id)
             .then(data => {
+                console.log(1)
                 if(!data) throw { name: 'NOT_FOUND' }
                 else {
                     return data.update({
@@ -172,17 +174,19 @@ class LocationController {
                 }
             })
             .then(data => {
+                console.log(2)
                 result = data
                 let payload = {
                     LocationId : data.id,
                     waterLevel : data.waterLevel,
                     image: req.body.image,
-                    UserId : 1// default dulu sementara
+                    UserId : 4// default dulu sementara
                 }
                 // 02. create di postgres History
                 return History.create(payload)
             })
             .then(data => {
+                console.log(3)
                 // 03. update di firebase DB
                 return LocationRef.child(id).update({
                     lastUpdate:`"${data.updatedAt}"`,
@@ -191,6 +195,7 @@ class LocationController {
                     )
             })
             .then(data => {
+                console.log(4)
                 res.status(200).json({ result })
             })
             .catch(err => {
@@ -201,6 +206,7 @@ class LocationController {
             let result
     
              // 01. udpate di postgres Location
+             console.log(5)
             Location.findByPk(id)
             .then(data => {
                 if(!data) throw { name: 'NOT_FOUND' }
@@ -213,6 +219,7 @@ class LocationController {
                 }
             })
             .then(data => {
+             console.log(6)
                 // 03. update di firebase DB
                 return LocationRef.child(id).update({
                     lastUpdate:`"${data.updatedAt}"`,
@@ -220,6 +227,7 @@ class LocationController {
                 })
             })
             .then(data => {
+             console.log(7)
                 res.status(200).json({ data })
             })
             .catch(err => {
