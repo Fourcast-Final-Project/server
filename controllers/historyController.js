@@ -4,6 +4,7 @@ const { Location } = require('../models')
 class HistoryController {
     static create(req, res, next) {
         const { LocationId, waterLevel, image } = req.body
+        console.log(LocationId, waterLevel. image)
         const UserId = req.loggedInUser.id
         History.create({
             LocationId, waterLevel, UserId, image

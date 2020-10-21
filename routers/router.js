@@ -20,7 +20,7 @@ router.get('/locations/find/:query', LocationController.searchInSearch)
 router.get('/locations', LocationController.getAllLocation)
 router.post('/locations', LocationController.createLocation)
 router.get('/locations/:id', LocationController.getByIdLocation)
-router.put('/locations/:id', LocationController.editLocation)
+router.put('/locations/:id', authentication, LocationController.editLocation)
 // router.put('/locations/report/:id', LocationController.report)
 // router.delete('/locations/:id', LocationController.destroyLocation)
 
