@@ -157,7 +157,6 @@ class LocationController {
 
         let { id } = req.params
         console.log(id, 'INI DRI EDIT LOC!!!!!!!!!')
-        // console.log(req.body, "INI WATER LEVEL DRI CONTROLLER>>>>>>>>>>>>>>>>>>>>")
         console.log(req.body, "INI WATER LEVEL DRI CONTROLLER>>>>>>>>>>>>>>>>>>>>")
         if (req.body.waterLevel > 50) {
             let result
@@ -182,7 +181,8 @@ class LocationController {
                     LocationId : data.id,
                     waterLevel : data.waterLevel,
                     image: req.body.image,
-                    UserId : 4 //req.loggedInUser.id// default dulu sementara
+                    UserId : req.loggedInUser.id //req.loggedInUser.id// default dulu sementara
+//                     UserId : 4 //req.loggedInUser.id// default dulu sementara
                 }
                 // 02. create di postgres History
                 return History.create(payload)

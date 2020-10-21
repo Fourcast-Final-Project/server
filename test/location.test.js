@@ -232,7 +232,6 @@ describe('read one location/error case', () => {
 //     })
 // })
 
-
 describe('Search by Name', () => {
     test ('success search by name', (done) => {
         request (app)
