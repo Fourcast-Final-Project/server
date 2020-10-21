@@ -178,7 +178,7 @@ class LocationController {
                     LocationId : data.id,
                     waterLevel : data.waterLevel,
                     image: req.body.image,
-                    UserId : 4 //req.loggedInUser.id// default dulu sementara
+                    UserId : req.loggedInUser.id //req.loggedInUser.id// default dulu sementara
                 }
                 // 02. create di postgres History
                 return History.create(payload)
