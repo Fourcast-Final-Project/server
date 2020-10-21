@@ -14,10 +14,12 @@ let access_token = null
 
 beforeAll(function(done) {
     Location.create({
-        name: 'depok',
-        waterLevel: 3.3,
+        name: 'depok', // Kebon Jeruk
+        area: 3.3, // West Jakarta
+        city: 'Jakarta', // Jakarta
+        waterLevel: 21.2,
         latitude: -6.385589,
-        longitude: 106.830711
+        longitude: -6.385589
     })
     .then(location => {
         LocationId = location.id
@@ -36,22 +38,46 @@ beforeAll(function(done) {
     })
 })
 
+let newLocationId = LocationId+7
+
 describe('create subscribe/success case', () => {
     test ('success adding city to subscribed list', (done) => {
         request (app)
             .post('/subscribes')
             .set('access_token', access_token)
             .send({
-                LocationId
+                LocationId: newLocationId
             })
             .end( function(err, res) {
                if (err) throw err
-               expect(res.status).toBe(201)
-               expect(res.body).toHaveProperty('msg', "subscribe location succeed")
+               expect(res.status).toBe(201)//200
+               expect(res.body).toHaveProperty('msg', "subscribe location succeed")//you already subscribe for this location before
                done()
             })
     })
 })
+
+
+describe('create subscribe/success case', () => {
+    test ('failed adding city to subscribed list because already subscribe', (done) => {
+        request (app)
+            .post('/subscribes')
+            .set('access_token', access_token)
+            .send({
+                LocationId: LocationId
+            })
+            .end( function(err, res) {
+                const errors = ['you already subscribed']
+                if (err) throw err
+                expect(res.status).toBe(400)
+                expect(res.body).toHaveProperty('errors', expect.any(Array))
+                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+                done()
+            })
+    })
+})
+
+
 
 describe('create subscribe/error case', () => {
     test ('didnt have user_id', (done) => {
@@ -69,6 +95,44 @@ describe('create subscribe/error case', () => {
                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
                done()
             })
+    })
+
+    describe('create subscribe/error case', () => {
+        test ('didnt have user_id', (done) => {
+            request (app)
+                .post('/subscribes')
+                .send({
+                    LocationId
+                })
+                .end( function(err, res) {
+                    const errors = ["Your authentication failed!!"]
+                   if (err) throw err
+                   expect(res.status).toBe(401)
+                   expect(res.body).toHaveProperty('errors', expect.any(Array))
+                   expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+                   done()
+                })
+        })
+    })
+
+
+    describe('create subscribe/error case', () => {
+        test ('didnt have user_id', (done) => {
+            request (app)
+                .get('/subscribes')
+                .set('access_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJ0ZXN0QG1haWwuY29tIiwiaWF0IjoxNjAzMTc3NzkwfQ.DWvWVSc4lXSj0ak52qPUNiIt7suMYewAT_1-TnYyp9E')
+                .send({
+                    LocationId
+                })
+                .end( function(err, res) {
+                    const errors = ["The data you looking for is not found!!"]
+                   if (err) throw err
+                   expect(res.status).toBe(404)
+                   expect(res.body).toHaveProperty('errors', expect.any(Array))
+                   expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+                   done()
+                })
+        })
     })
 
     test ('didnt have location_id', (done) => {
@@ -166,9 +230,24 @@ describe('read one subscribe/error case', () => {
             })
     })
 
+    test ('didnt have UserId', (done) => {
+        request (app)
+            .get(`/subscribes/${subscribeId}`)
+            .send()
+            .end( function(err, res) {
+                const errors = ["Your authentication failed!!"]
+                if (err) throw err
+                expect(res.status).toBe(401)
+                expect(res.body).toHaveProperty('errors', expect.any(Array))
+                expect(res.body.errors).toEqual(expect.arrayContaining(errors))
+                done()
+            })
+    })
+
+
     test ('invalid subscribe id', (done) => {
         request (app)
-            .get(`/subscribes/${subscribeId + 10}`)
+            .get(`/subscribes/${subscribeId + 1000}`)
             .set('access_token', access_token)
             .send()
             .end( function(err, res) {

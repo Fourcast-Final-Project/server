@@ -7,6 +7,9 @@ class SubscribeController {
         const { LocationId } = req.body
         console.log("masuk subss", LocationId)
         const UserId = req.loggedInUser.id
+        // Subscribe.create({
+        //     UserId: idUser, 
+        //     LocationId: idLocation
         Subscribe.findOrCreate({
             where: {
                 UserId, 
@@ -16,7 +19,8 @@ class SubscribeController {
         .then(data => {
              //console.log (data[1])
             if(data[1] === false){
-                res.status(200).json({ msg: 'you already subscribe for this location before' })
+                // res.status(200).json({ msg: 'you already subscribe for this location before' })
+                throw ({name: 'ALREADY_SUBCRIBE'})
             } else {
                 res.status(201).json({ msg: 'subscribe location succeed' })
             }
@@ -38,7 +42,7 @@ class SubscribeController {
             }]
         })
         .then(data => {
-            if (!UserId) throw ({ name: 'INVALID_DATA' })
+            if (data.length === 0) throw ({ name: 'NOT_FOUND' })
             res.status(200).json({ results: data })
         })
         .catch(err => {
@@ -55,7 +59,6 @@ class SubscribeController {
             }
         })
         .then(data => {
-            if (!UserId) throw ({ name: 'INVALID_DATA' })
             if (!data) throw { name: 'NOT_FOUND' }
             res.status(200).json({ result: data })
         })
@@ -93,7 +96,6 @@ class SubscribeController {
             }
         })
         .then(data => {
-            if (!UserId) throw ({ name: 'INVALID_DATA' })
             res.status(200).json({ msg: 'success removing all cities from user subscribed list' })
         })
         .catch(err => {
