@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fourcast-pizza",
+  "private_key_id": "cae2e368628067a8d063f74af4d88f74b352e560",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDdcSLJdH3k3PR9\nGn/jSgjSkY1IR12L4yI+J2fJ/QGGG4lkwxIxBss0B+hllEg98NShoHlIZFWfkJlb\nyqBzy9VCcwMdPSjmzn+9O9lIhD4HPB0v4dnLC6dQpbCNurzVBYnhKfHgb6OCeSph\n7LFUJpbnK/iHz9dhO+Z3HDWbDVZbi4Vm41oC8muLazdCq7Njd+NMzMCMcCZPyW87\nva1/DGn2sYUsAN2LmcXCbc/t2Fm3TrPj5cfg5HWbiMtMHHOnwQjIiikSADqih/+C\nkq0s/NvZlp9tPKq2ERiI2daGZUoGfgwMpXiT84m4FY+0GBs+KvV46JkZh8pGlTXK\ncVK/lygvAgMBAAECggEACxfGyVa3k8ZpzPaN34Hu7TVzYWKJ0h8fsQNiVKEC+YfZ\nmx2WhLQ1a7bVsnj6IXg1/p6+VJ0KGQMyW4HMBeD5HuoKBuXwbZd8mKst2E8fmFcv\nkx16Poyn5gdWz9LB8N3lKU1jm32cMEYHlH455+BDAPOX8J29yVYp1l+oY8sIP2+m\n9T9xLfbQa34L6qOlZFnyXaTJkFPEmI78HDmiLl6SFh82un2mt0xvx1XvY9nlU4Qs\nnfKX/Q99npQly7CSZxILQEhsMGMY568OAqwld48MDaei4ItlI+k09SNKi0fapDg2\nHk9dJN3fxvmopPqicCQ6eMONF5rfrTOwFMqlhofTmQKBgQDvkFacw3HWKTMCmZ3U\n3OAQMQtmoZwPBQyWy0UGaxCTcMrUm9Z/mhDq8XODFSHFXpZtEwbTcDxBQJBICTWh\nMjU5t1HUyTlAeI7sE72knn9lJgf2U8RN30lcV/wZf185AfVKfEJvqv+tUb8jTthK\nwZak0FqGM3mp8QJP5YR+hSpyYwKBgQDsooHx7dxBTNE+WqSY5F+f/LVTl5nFFAe6\nyqIa39YPtFovnIjIEyGHUfmKswcdyedxTdo0BMbf5n2XUHDpuW3/E23I9BJH2Lk8\neGlB+JPLpGA49Cz7p7uUtRi20peAIT3LHVUekdmwMsKvj/WMHiy2k1fkBaOCWJYm\np/fMkpb2xQKBgQCodYJCaDlzlLMXH/jZx5wUJrjSqdA4y58nprbaJY2ZcJZg3Vj/\nj9JXtAQ7aC/AP5xeBSQmqOTmKcWLslYxDUJaXKvBiuKkkGJIZjVUPlRtR0oQEKWY\n8OwAcKqJL4VBbDwV7b02EzQJp9NVu8ri/rC1IwKVHjtuoliy4D3ETlYj6wKBgD6j\ndcpYsGkIsIrU66UdLsLm3gjWpHmqp7EmWmrKvZtCnmzj/sEXb1SmumugoE2eWImB\nljUW3p3+IVigjoMP9rICrpj3Iq+qCr6bESHJbzYEuQPaft3OtLTUi0o5zKi6I+VU\nSmfhK8KcbTST4ufIRQW/UxCk/XdPg8+PvuSEGToRAoGAAK05pEXmfWEqMuCKjFMQ\nU+OomhXrSOfzjZ77yJgFzt2Lnu2EtcquObvDgPSuSmOp8mHiFmSI/4hrYofidKQ9\nkNKx+ZIwIpsMy/xp3k+eXaj1vV7R/TxzC79oTmKluUxNbo9RfK/sCV+q9zsMdGi/\n3uXoPyF+r3u1hyg/u14FeFI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-z950l@fourcast-pizza.iam.gserviceaccount.com",
+  "client_id": "105119669314512264697",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-z950l%40fourcast-pizza.iam.gserviceaccount.com"
+}
